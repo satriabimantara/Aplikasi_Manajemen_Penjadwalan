@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+
+{% block page_content %}
+<div class="card">
+    <div class="card-header">Cek Jadwal</div>
+    <div class="card-body">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="nama_hari">Hari</label>
+                        <select class="form-control" id="nama_hari" name='nama_hari' required>
+                            <option value=''>- -</option>
+                            {% for hari in objects.days %}
+                            <option>{{hari}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="kode_kelas_peserta">Kelas Peserta</label>
+                        <select class="form-control" id="kode_kelas_peserta" name='kode_kelas_peserta' required>
+                            <option value=''>- -</option>
+                            {% for detailkelas in objects.detail_kelas %}
+                            <option value='{{detailkelas.kode_kelas_peserta}}'>{{detailkelas.kode_kelas_peserta}} |
+                                {{detailkelas.kelas.nama_kelas}} -
+                                {{detailkelas.jalur.nama_jalur}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class='btn btn-success'>Cek</button>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+
+
+        {% for f in objects.form %}
+        <div class="form-group">
+            {{f.label}}
+            {{f}}
+        </div>
+        {% endfor %}
+
+
+    </div>
+</div>
+{% endblock page_content %}
