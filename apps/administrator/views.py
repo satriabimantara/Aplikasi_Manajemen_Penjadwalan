@@ -11,6 +11,7 @@ from .mapel_views import (
     MataPelajaranDeleteView,
     MataPelajaranUpdateView,
     MataPelajaranIndexView,
+    DetailMataPelajaranIndexView,
     DetailMataPelajaranCreateView,
     DetailMataPelajaranDeleteView,
     DetailMataPelajaranUpdateView,
@@ -37,13 +38,19 @@ from .waktu_views import (
     DetailWaktuUpdateView,
     DetailWaktuDeleteView
 )
-from .jadwal_views import (
-    JadwalListView,
-    JadwalCreateView,
-    JadwalDeleteView,
-    JadwalUpdateView,
+
+from .reset_views import (
+    ResetIndexView,
+    guru_reset,
+    mata_pelajaran_reset,
+    kelas_peserta_reset,
+    ruangan_reset,
+    waktu_reset,
+    detail_mata_pelajaran_reset,
+    detail_waktu_reset,
     jadwal_reset
 )
+
 from .models import (
     DetailWaktu,
     Guru,

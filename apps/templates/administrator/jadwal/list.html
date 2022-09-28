@@ -2,42 +2,6 @@
 
 
 {% block page_content %}
-<div class="row ">
-    <div class="col d-flex justify-content-between ">
-        <article>
-            <a href="{% url 'database:jadwal_create' %}" class="btn btn-success btn-icon-split">
-                <span class="icon text-white-50">
-                    <i class="fas fa-check"></i>
-                </span>
-                <span class="text">Tambah Jadwal</span>
-            </a>
-            {% comment %} <a class="btn btn-secondary btn-icon-split" data-toggle="collapse"
-                href="#collapseValidasiJadwalPerHari" role="button" aria-expanded="false"
-                aria-controls="collapseValidasiJadwalPerHari">
-                <span class="icon text-white-50">
-                    <i class="fas fa-info-circle"></i>
-                </span>
-                <span class="text">Validasi Jadwal Per Hari</span>
-            </a>
-            <a class="btn btn-primary btn-icon-split" data-toggle="collapse" href="#collapseValidasiJadwalJamPelajaran"
-                role="button" aria-expanded="false" aria-controls="collapseValidasiJadwalJamPelajaran">
-                <span class="icon text-white-50">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </span>
-                <span class="text">Validasi Jam Pelajaran</span>
-            </a> {% endcomment %}
-        </article>
-        <article>
-            <a class="btn btn-danger btn-icon-split" data-toggle="collapse" href="#collapseResetJadwal" role="button"
-                aria-expanded="false" aria-controls="collapseResetJadwal">
-                <span class="icon text-white-50">
-                    <i class="fas fa-trash"></i>
-                </span>
-                <span class="text">Reset Jadwal</span>
-            </a>
-        </article>
-    </div>
-</div>
 {% if messages %}
 {% for message in messages %}
 <div class="row mt-3">
@@ -52,137 +16,80 @@
 </div>
 {% endfor %}
 {% endif %}
-{% comment %} <div class="row mt-5">
+<div class="row ">
     <div class="col">
-        <div class="card shadow mb-4 collapse" id="collapseValidasiJadwalPerHari">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Validasi Jadwal Per Hari</h6>
-            </div>
-            <div class="card-body">
-                <form action="{% url 'database:jadwal_validasi_hari' %}" method='POST'>
-                    <div class="form-group">
-                        <label for="nama_hari">Hari</label>
-                        <select class="form-control" id="nama_hari" name='nama_hari'>
-                            {% for day in jadwal_list.days %}
-                            <option>{{day}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    {% csrf_token %}
-                    <button class="btn btn-success" type='submit'>
-                        Validasi
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> {% endcomment %}
-{% comment %} <div class="row mt-3">
-    <div class="col">
-        <div class="card shadow mb-4 collapse" id="collapseValidasiJadwalJamPelajaran">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Validasi Jam Pelajaran</h6>
-            </div>
-            <div class="card-body">
-                <p class="lead">Validasi jam pelajaran adalah memastikan jam pelajaran yang diterima oleh kelas peserta
-                    untuk 1 minggu sesuai jam mata pelajaran yang sudah ditetapkan!</p>
-                <hr>
-                <p>
-                    Pastikan jadwal di masing-masing hari sudah terinput semuanya! Apabila ada jadwal yang belum
-                    terinput, maka proses validasi jam pelajaran tidak bisa dilakukan.
-                </p>
-                <form action="{% url 'database:jadwal_validasi_jam_pelajaran' %}" method="post">
-                    {% csrf_token %}
-                    <button class="btn btn-primary" type="submit" name='btnValidasiJamPelajaran'
-                        value='validasi'>Validasi</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> {% endcomment %}
-<div class="row mt-3">
-    <div class="col">
-        <div class="alert alert-warning collapse" role="alert" id="collapseResetJadwal">
-            <h4 class="alert-heading">Reset Jadwal</h4>
-            <p>Apakah Anda yakin ingin menghapus seluruh jadwal? Klik tombol <span class='font-weight-bold'>Reset</span>
-                jika sudah yakin.
-            </p>
-            <p class="mb-0"><span class='font-weight-bold'>Perhatikan!</span> Data yang sudah dihapus tidak bisa
-                dikembalikan seperti semula!</p>
-            <hr>
-            <form action="{% url 'database:jadwal_reset' %}" method="post">
-                {% csrf_token %}
-                <button class="btn btn-danger" type="submit" name='btnResetJadwal' value='reset'>Reset</button>
-            </form>
-        </div>
+        {% comment %} Tambahkan role user disini siapa yang berhak menambah jadwal (Tenaga Pengajar) {% endcomment %}
+        <article>
+            <a href="{% url 'tenagapengajar:jadwal_create' %}" class="btn btn-success btn-icon-split">
+                <span class="icon text-white-50">
+                    <i class="fas fa-check"></i>
+                </span>
+                <span class="text">Tambah Jadwal</span>
+            </a>
+        </article>
+
     </div>
 </div>
-{% for hari, detail_kelas in jadwal_list.jadwal_list.items %}
+{% for hari, jadwals in jadwal_list.jadwal_list.items %}
 <div class="row mt-3">
     <div class="col">
         <div class="card shadow mb-4">
             <a href="#collapseJadwal{{hari}}" class="d-block card-header py-3" data-toggle="collapse" role="button"
                 aria-expanded="true" aria-controls="collapseJadwal{{hari}}">
-                <h6 class="m-0 font-weight-bold text-primary">{{hari.capitalize}}</h6>
+                <h6 class="m-0 font-weight-bold text-primary">{{hari.upper}}</h6>
             </a>
             <div class="collapse show" id="collapseJadwal{{hari}}">
                 <div class="card-body">
-                    {% for kelas, jadwals in detail_kelas.items %}
                     <div class="row">
                         <div class="col">
-                            <div class="card shadow mb-4">
-                                <a href="#collapseJadwal{{hari}}Kelas{{kelas}}" class="d-block card-header py-3"
-                                    data-toggle="collapse" role="button" aria-expanded="true"
-                                    aria-controls="collapseJadwal{{hari}}Kelas{{kelas}}">
-                                    <h6 class="m-0 font-weight-bold text-primary">{{kelas}}</h6>
-                                </a>
-                                <div class="collapse show" id="collapseJadwal{{hari}}Kelas{{kelas}}">
-                                    <div class="card-body">
-                                        <table class="table table-responsive">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Jam ke-</th>
-                                                    <th scope="col">Guru</th>
-                                                    <th scope="col">Mapel</th>
-                                                    <th scope="col">Ruangan</th>
-                                                    <th scope="col">Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {% for jadwal in jadwals %}
-                                                <tr>
-                                                    <th scope="row">{{jadwal.detail_waktu.waktu.nama_waktu}}</th>
-                                                    <td>{{jadwal.guru.nama_lengkap}}</td>
-                                                    <td>{{jadwal.detail_pelajaran.mapel.mapel}}</td>
-                                                    <td>{{jadwal.ruangan.nama_ruangan}}</td>
-                                                    <td>
-                                                        <div class="d-flex justify-content-end">
-                                                            <a href="{% url 'database:jadwal_update' jadwal.id %}"
-                                                                class="btn btn-warning btn-icon-split btn-sm">
-                                                                <span class="icon text-white-50">
-                                                                    <i class="fas fa-exclamation-triangle"></i>
-                                                                </span>
-                                                                <span class="text">Edit</span>
-                                                            </a>
-                                                            <a href="{% url 'database:jadwal_delete' jadwal.id %}"
-                                                                class="btn btn-danger btn-icon-split btn-sm">
-                                                                <span class="icon text-white-50">
-                                                                    <i class="fas fa-trash"></i>
-                                                                </span>
-                                                                <span class="text">Hapus</span>
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                {% endfor %}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                            <div class="card-body">
+                                <table class="table table-responsive" id='tableJadwal{{hari.capitalize}}' width="100%"
+                                    cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Kelas Peserta</th>
+                                            <th scope="col">Jam ke-</th>
+                                            <th scope="col">Guru</th>
+                                            <th scope="col">Mapel</th>
+                                            <th scope="col">Ruangan</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for jadwal in jadwals %}
+                                        <tr>
+                                            <td>{{jadwal.detail_pelajaran.kelas_peserta}}</td>
+                                            <td>{{jadwal.detail_waktu.waktu.nama_waktu}}</td>
+                                            <td>{{jadwal.guru.nama_lengkap}}</td>
+                                            <td>{{jadwal.detail_pelajaran.mapel.mapel}}</td>
+                                            <td>{{jadwal.ruangan.nama_ruangan}}</td>
+                                            <td>{{jadwal.status_validasi}}</td>
+                                            <td>
+                                                <div class="d-flex justify-content-end">
+                                                    <a href="{% url 'tenagapengajar:jadwal_update' jadwal.id %}"
+                                                        class="btn btn-warning btn-icon-split btn-sm">
+                                                        <span class="icon text-white-50">
+                                                            <i class="fas fa-exclamation-triangle"></i>
+                                                        </span>
+                                                        <span class="text">Edit</span>
+                                                    </a>
+                                                    <a href="{% url 'tenagapengajar:jadwal_delete' jadwal.id %}"
+                                                        class="btn btn-danger btn-icon-split btn-sm">
+                                                        <span class="icon text-white-50">
+                                                            <i class="fas fa-trash"></i>
+                                                        </span>
+                                                        <span class="text">Hapus</span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-                    {% endfor %}
                 </div>
             </div>
         </div>

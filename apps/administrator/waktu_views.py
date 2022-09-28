@@ -20,13 +20,9 @@ class WaktuIndexView(ListView):
     }
 
     def get(self, request):
-        all_hari = Hari.objects.all()
-        all_waktu = Waktu.objects.all()
         all_detailwaktu = DetailWaktu.objects.all()
         self.context.update(
             {
-                'all_hari': all_hari,
-                'all_waktu': all_waktu,
                 'all_detailwaktu': all_detailwaktu,
             }
         )

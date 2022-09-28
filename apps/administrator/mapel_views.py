@@ -21,10 +21,25 @@ class MataPelajaranIndexView(ListView):
 
     def get(self, request):
         all_mapel = MataPelajaran.objects.all()
-        all_detailmapel = DetailMataPelajaran.objects.all()
         self.context.update(
             {
                 'all_mapel': all_mapel,
+            }
+        )
+        return render(request, self.template_name, self.context)
+
+
+class DetailMataPelajaranIndexView(ListView):
+    template_name = 'administrator/mapel/index_detail_mapel.html'
+    context = {
+        'title_page': "Database | Mapping Mata Pelajaran",
+        'subtitle_page': "Halaman Mapping Mata Pelajaran"
+    }
+
+    def get(self, request):
+        all_detailmapel = DetailMataPelajaran.objects.all()
+        self.context.update(
+            {
                 'all_detailmapel': all_detailmapel,
             }
         )
@@ -41,9 +56,9 @@ class DetailMataPelajaranCreateView(SuccessMessageMixin, CreateView):
             'button_color': 'btn-success',
             'button_name': 'Tambah'
         },
-        'back_url': 'administrator_IT:mata_pelajaran_list'
+        'back_url': 'administrator_IT:detail_mata_pelajaran_list'
     }
-    success_url = reverse_lazy("administrator_IT:mata_pelajaran_list")
+    success_url = reverse_lazy("administrator_IT:detail_mata_pelajaran_list")
     success_message = '%(mapel)s  | %(kelas_peserta)s was created successfully'
 
     def form_valid(self, form):

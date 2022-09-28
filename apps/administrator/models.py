@@ -161,7 +161,7 @@ class Hari(models.Model):
 
 class MataPelajaran(models.Model):
     kode_mapel = models.CharField(
-        'Kode Mata Pelajaran (MU001)',
+        'Kode Mata Pelajaran',
         max_length=10,
         unique=True
     )

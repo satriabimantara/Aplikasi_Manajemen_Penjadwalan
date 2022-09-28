@@ -128,7 +128,7 @@ class DetailKelasForms(forms.ModelForm):
         ).exists()
         if existing_same_kelas_and_jalur:
             raise forms.ValidationError(
-                'Kelas dan Jalur yang sama sudah ada!', code='kelas_jalur_exist')
+                'Kelas with the same Jalur is already exist!', code='kelas_jalur_exist')
         return cleaned_data
 
 
@@ -156,8 +156,22 @@ class DetailMataPelajaranForm(forms.ModelForm):
                     'class': 'form-control',
                 }
             ),
-
         }
+
+    def clean(self, *args, **kwargs):
+        cleaned_data = super().clean(*args, **kwargs)
+        mapel = cleaned_data.get('mapel')
+        kelas_peserta = cleaned_data.get('kelas_peserta')
+
+        # check apakah sudah ada mapel dan kelas peserta yang sama di DB
+        existing_same_mapel_and_kelas_peserta = DetailMataPelajaran.objects.filter(
+            mapel=mapel,
+            kelas_peserta=kelas_peserta
+        ).exists()
+        if existing_same_mapel_and_kelas_peserta:
+            raise forms.ValidationError(
+                'Mata Pelajaran with the same Kelas Peserta is already exist!', code='mapel_kelas_exist')
+        return cleaned_data
 
 
 class WaktuForm(forms.ModelForm):
@@ -224,7 +238,7 @@ class JadwalForm(forms.ModelForm):
         ).exists()
         if existing:
             raise forms.ValidationError(
-                'Schedule already exist!', code='schedule_exist')
+                'Schedule is already exist!', code='schedule_exist')
         # check apakah untuk di Waktu ke-X, kelas Y menerima lebih dari 1 mata pelajaran?
         existing_2 = Jadwal.objects.filter(
             detail_waktu=detail_waktu,
@@ -355,5 +369,5 @@ class DetailWaktuForm(forms.ModelForm):
         ).exists()
         if existing_same_hari_dan_waktu:
             raise forms.ValidationError(
-                'Hari dan Waktu yang sama sudah ada!', code='hari_waktu_exist')
+                'Hari with the same Waktu is already exist!', code='hari_waktu_exist')
         return cleaned_data

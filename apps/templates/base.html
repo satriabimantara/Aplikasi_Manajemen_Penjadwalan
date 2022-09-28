@@ -21,7 +21,7 @@
             <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
                 <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'index' %}">
                     <div class="sidebar-brand-icon rotate-n-15">
                         <i class="fas fa-calendar-check"></i>
                     </div>
@@ -65,16 +65,19 @@
                             <a class="collapse-item" href="{% url 'administrator_IT:kelas_list' %}">Kelas</a>
                             <a class="collapse-item" href="{% url 'administrator_IT:waktu_list' %}">Waktu Pelajaran</a>
                             <a class="collapse-item" href="{% url 'administrator_IT:ruangan_list' %}">Ruangan</a>
+                            <a class="collapse-item"
+                                href="{% url 'administrator_IT:detail_mata_pelajaran_list' %}">Mapping
+                                Mata Pelajaran</a>
                         </div>
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'index' %}">
+                    <a class="nav-link" href="{% url 'jadwal_list' %}">
                         <i class="fas fa-search"></i>
                         <span>Lihat Jadwal</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'index' %}">
+                    <a class="nav-link" href="{% url 'administrator_IT:reset_index' %}">
                         <i class="fas fa-trash-alt"></i>
                         <span>Reset Data</span></a>
                 </li>
@@ -108,13 +111,30 @@
                         <span>Revisi Jadwal</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'index' %}">
+                    <a class="nav-link" href="{% url 'jadwal_list' %}">
                         <i class="fas fa-search"></i>
                         <span>Lihat Jadwal</span></a>
                 </li>
 
                 <!-- Divider -->
                 <hr class="sidebar-divider">
+
+                <!-- Heading -->
+                <div class="sidebar-heading">
+                    Tenaga Pengajar
+                </div>
+
+                <!-- Nav Item - Tenaga Pengajar -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'index' %}">
+                        <i class="fas fa-undo"></i>
+                        <span>Lihat Revisi Jadwal</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'jadwal_list' %}">
+                        <i class="fas fa-search"></i>
+                        <span>Lihat Jadwal</span></a>
+                </li>
 
                 <!-- Sidebar Toggler (Sidebar) -->
                 <div class="text-center d-none d-md-inline">

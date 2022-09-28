@@ -40,7 +40,7 @@ class DetailMataPelajaranForm(forms.ModelForm):
         ).exists()
         if existing_same_mapel_and_kelas_peserta:
             raise forms.ValidationError(
-                'Mata Pelajaran dengan Kelas Peserta yang sama sudah ada!', code='mapel_kelas_exist')
+                'Mata Pelajaran with the same Kelas Peserta is already exist!', code='mapel_kelas_exist')
         return cleaned_data
 
 
@@ -57,7 +57,7 @@ class DetailWaktuForm(forms.ModelForm):
         ).exists()
         if existing_same_hari_dan_waktu:
             raise forms.ValidationError(
-                'Hari dan Waktu yang sama sudah ada!', code='hari_waktu_exist')
+                'Hari with the same Waktu is already exist!', code='hari_waktu_exist')
         return cleaned_data
 
 
@@ -74,7 +74,7 @@ class DetailKelasForm(forms.ModelForm):
         ).exists()
         if existing_same_kelas_and_jalur:
             raise forms.ValidationError(
-                'Kelas dan Jalur yang sama sudah ada!', code='kelas_jalur_exist')
+                'Kelas with the same Jalur is already exist!', code='kelas_jalur_exist')
         return cleaned_data
 
 

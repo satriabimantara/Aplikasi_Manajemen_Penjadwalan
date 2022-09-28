@@ -1,6 +1,8 @@
 from django.urls import path, re_path
 from django.views.generic import TemplateView
 
+from administrator.reset_views import kelas_peserta_reset
+
 from .views import (
     IndexView,
     GuruListView,
@@ -11,6 +13,7 @@ from .views import (
     MataPelajaranCreateView,
     MataPelajaranUpdateView,
     MataPelajaranDeleteView,
+    DetailMataPelajaranIndexView,
     DetailMataPelajaranCreateView,
     DetailMataPelajaranUpdateView,
     DetailMataPelajaranDeleteView,
@@ -29,10 +32,13 @@ from .views import (
     DetailWaktuCreateView,
     DetailWaktuUpdateView,
     DetailWaktuDeleteView,
-    JadwalListView,
-    JadwalCreateView,
-    JadwalDeleteView,
-    JadwalUpdateView,
+    ResetIndexView,
+    guru_reset,
+    mata_pelajaran_reset,
+    ruangan_reset,
+    waktu_reset,
+    detail_mata_pelajaran_reset,
+    detail_waktu_reset,
     jadwal_reset
 )
 
@@ -52,6 +58,8 @@ urlpatterns = [
     path('mata_pelajaran/delete/<int:pk>/',
          MataPelajaranDeleteView.as_view(), name='mata_pelajaran_delete'),
 
+    path('detail_mata_pelajaran/', DetailMataPelajaranIndexView.as_view(),
+         name='detail_mata_pelajaran_list'),
     path('detail_mata_pelajaran/tambah/', DetailMataPelajaranCreateView.as_view(),
          name='detail_mata_pelajaran_create'),
     path('detail_mata_pelajaran/update/<int:pk>/',
@@ -89,15 +97,24 @@ urlpatterns = [
     path('detail_waktu/delete/<int:pk>/',
          DetailWaktuDeleteView.as_view(), name='detail_waktu_delete'),
 
-
-    path('jadwal/', JadwalListView.as_view(), name='jadwal_list'),
-    path('jadwal/reset/',
+    path('reset/',
+         ResetIndexView.as_view(), name='reset_index'),
+    path('reset/jadwal',
          jadwal_reset, name='jadwal_reset'),
-    path('jadwal/tambah/', JadwalCreateView.as_view(), name='jadwal_create'),
-    path('jadwal/update/<int:pk>/',
-         JadwalUpdateView.as_view(), name='jadwal_update'),
-    path('jadwal/delete/<int:pk>/',
-         JadwalDeleteView.as_view(), name='jadwal_delete'),
+    path('reset/guru',
+         guru_reset, name='guru_reset'),
+    path('reset/mata_pelajaran',
+         mata_pelajaran_reset, name='mata_pelajaran_reset'),
+    path('reset/kelas_peserta',
+         kelas_peserta_reset, name='kelas_peserta_reset'),
+    path('reset/ruangan',
+         ruangan_reset, name='ruangan_reset'),
+    path('reset/waktu',
+         waktu_reset, name='waktu_reset'),
+    path('reset/detail_mata_pelajaran',
+         detail_mata_pelajaran_reset, name='detail_mata_pelajaran_reset'),
+    path('reset/detail_waktu',
+         detail_waktu_reset, name='detail_waktu_reset'),
     path('', IndexView.as_view(), name='index'),
 ]
 # add a flag for handling 404 page not found error
