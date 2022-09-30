@@ -39,7 +39,7 @@ class KelasIndexView(ListView):
 
 class DetailKelasCreateView(SuccessMessageMixin, CreateView):
     form_class = DetailKelasForms
-    template_name = 'administrator/create.html'
+    template_name = 'create.html'
     extra_context = {
         'title_page': 'Manage Kelas Peserta | Tambah',
         'subtitle_page': "Tambah Data Kelas Peserta",
@@ -49,7 +49,7 @@ class DetailKelasCreateView(SuccessMessageMixin, CreateView):
         },
         'back_url': 'administrator_IT:kelas_list'
     }
-    success_url = reverse_lazy("administrator_IT:kelas_list")
+    success_url = reverse_lazy("administrator_IT:kelas_create")
     success_message = '%(kelas)s | %(jalur)s was created successfully'
 
     def form_valid(self, form):
@@ -69,7 +69,7 @@ class DetailKelasCreateView(SuccessMessageMixin, CreateView):
 class DetailKelasUpdateView(SuccessMessageMixin, UpdateView):
     model = DetailKelas
     form_class = DetailKelasForms
-    template_name = 'administrator/create.html'
+    template_name = 'create.html'
     extra_context = {
         'title_page': 'Manage Kelas Peserta | Update',
         'subtitle_page': "Update Data Kelas Peserta",
@@ -97,7 +97,7 @@ class DetailKelasUpdateView(SuccessMessageMixin, UpdateView):
 
 class DetailKelasDeleteView(DeleteView):
     model = DetailKelas
-    template_name = 'administrator/delete_confirmation.html'
+    template_name = 'delete_confirmation.html'
     success_url = reverse_lazy('administrator_IT:kelas_list')
     context_object_name = 'object_deleted'
     success_message = 'Data was deleted successfully'

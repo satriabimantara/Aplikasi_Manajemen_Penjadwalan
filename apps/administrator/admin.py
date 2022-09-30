@@ -11,7 +11,6 @@ from .models import (
     Hari,
     DetailWaktu,
     Ruangan,
-    Jadwal,
     User,
     RoleUser,
     DetailUser
@@ -101,7 +100,6 @@ admin.site.register([
     Waktu,
     Hari,
     Ruangan,
-    Jadwal,
     User,
     RoleUser,
     DetailUser

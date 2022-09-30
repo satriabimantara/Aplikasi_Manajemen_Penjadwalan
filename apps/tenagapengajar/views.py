@@ -2,16 +2,17 @@ from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.views.generic import (
-    ListView,
     CreateView,
     UpdateView,
     DeleteView,
-    FormView
+    ListView
 )
-from administrator.forms import (
+from administrator.models import Hari
+from pimpinan.models import RevisiJadwal
+from .forms import (
     JadwalForm,
 )
-from administrator.models import (
+from .models import (
     Jadwal,
 )
 # Create your views here.
@@ -19,7 +20,7 @@ from administrator.models import (
 
 class JadwalCreateView(SuccessMessageMixin, CreateView):
     form_class = JadwalForm
-    template_name = 'administrator/create.html'
+    template_name = 'create.html'
     extra_context = {
         'title_page': 'Manage Jadwal | Tambah',
         'subtitle_page': "Tambah Data Jadwal",
@@ -29,7 +30,7 @@ class JadwalCreateView(SuccessMessageMixin, CreateView):
         },
         'back_url': 'jadwal_list'
     }
-    success_url = reverse_lazy("jadwal_list")
+    success_url = reverse_lazy("tenagapengajar:jadwal_create")
     success_message = '%(detail_pelajaran)s | %(guru)s | %(detail_waktu)s was created successfully'
 
     def form_valid(self, form):
@@ -49,7 +50,7 @@ class JadwalCreateView(SuccessMessageMixin, CreateView):
 class JadwalUpdateView(SuccessMessageMixin, UpdateView):
     model = Jadwal
     form_class = JadwalForm
-    template_name = 'administrator/create.html'
+    template_name = 'create.html'
     extra_context = {
         'title_page': 'Manage Jadwal | Update',
         'subtitle_page': "Update Jadwal",
@@ -77,7 +78,7 @@ class JadwalUpdateView(SuccessMessageMixin, UpdateView):
 
 class JadwalDeleteView(DeleteView):
     model = Jadwal
-    template_name = 'administrator/delete_confirmation.html'
+    template_name = 'delete_confirmation.html'
     success_url = reverse_lazy('jadwal_list')
     context_object_name = 'object_deleted'
     success_message = 'Data was deleted successfully'
@@ -97,3 +98,34 @@ class JadwalDeleteView(DeleteView):
     def form_valid(self, form):
         messages.success(self.request, self.success_message)
         return super().form_valid(form)
+
+
+class RevisiJadwalListView(ListView):
+    model = RevisiJadwal
+    template_name = "tenagapengajar/revisi_jadwal_list.html"
+    context_object_name = 'revisi_jadwal_list'
+    extra_context = {
+        'title_page': 'Schedule | Revisi',
+        'subtitle_page': "Daftar Jadwal Direvisi",
+    }
+
+    def get_queryset(self):
+        revisi_jadwal_list = dict()
+        days = Hari.objects.values_list('nama_hari', flat=True).distinct()
+
+        # Buat dictionary untuk setiap kelas di setiap hari
+        for hari in days:
+            revisi_jadwal_list[hari] = self.model.objects.filter(
+                jadwal__detail_waktu__hari__nama_hari__iexact=str(hari)
+            ).order_by('jadwal__detail_waktu')
+        self.queryset = {
+            'revisi_jadwal_list': revisi_jadwal_list,
+            'days': days,
+        }
+        return super().get_queryset()
+
+    def get_context_data(self, **kwargs):
+        # merge dictionary context yang sebelumnya dengan extra context
+        self.kwargs.update(self.extra_context)
+        kwargs = self.kwargs
+        return super().get_context_data(**kwargs)

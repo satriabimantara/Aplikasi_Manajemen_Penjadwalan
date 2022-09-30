@@ -2,20 +2,13 @@ from django.views import View
 from django.shortcuts import render
 from django.views.generic import (
     ListView,
-    CreateView,
-    UpdateView,
-    DeleteView,
-    FormView
 )
-from administrator.forms import (
-    JadwalForm,
+from tenagapengajar.models import (
+    Jadwal,
 )
 from administrator.models import (
-    Jadwal,
-    DetailKelas,
-    Hari,
+    Hari
 )
-
 
 class IndexView(View):
     template_name = 'index.html'
@@ -30,7 +23,7 @@ class IndexView(View):
 
 class JadwalListView(ListView):
     model = Jadwal
-    template_name = "administrator/jadwal/list.html"
+    template_name = "jadwal/list.html"
     context_object_name = 'jadwal_list'
     extra_context = {
         'title_page': 'Schedule | Lihat',
@@ -46,7 +39,6 @@ class JadwalListView(ListView):
             jadwal_list[hari] = self.model.objects.filter(
                 detail_waktu__hari__nama_hari__iexact=str(hari),
             ).order_by('detail_waktu')
-        print(jadwal_list)
         self.queryset = {
             'jadwal_list': jadwal_list,
             'days': days,

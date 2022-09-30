@@ -2,17 +2,15 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.views import View
 from .models import (
-    Jadwal,
     Guru,
     MataPelajaran,
     DetailMataPelajaran,
-    Kelas,
     DetailKelas,
     Waktu,
     DetailWaktu,
     Ruangan
 )
-
+from tenagapengajar.models import Jadwal
 
 class ResetIndexView(View):
     template_name = 'administrator/reset.html'
@@ -57,7 +55,7 @@ def guru_reset(request):
             else:
                 message = 'There is not any rows in Guru databases!'
                 messages.warning(request, message)
-            return redirect('administrator_IT:guru_list')
+            return redirect('administrator_IT:reset_index')
     return render(request, template_reset_index, context)
 
 
@@ -76,7 +74,7 @@ def kelas_peserta_reset(request):
             else:
                 message = 'There is not any rows in Detail kelas Peserta databases!'
                 messages.warning(request, message)
-            return redirect('administrator_IT:kelas_list')
+            return redirect('administrator_IT:reset_index')
     return render(request, template_reset_index, context)
 
 
@@ -95,7 +93,7 @@ def ruangan_reset(request):
             else:
                 message = 'There is not any rows in Ruangan databases!'
                 messages.warning(request, message)
-            return redirect('administrator_IT:ruangan_list')
+            return redirect('administrator_IT:reset_index')
     return render(request, template_reset_index, context)
 
 
@@ -114,7 +112,7 @@ def mata_pelajaran_reset(request):
             else:
                 message = 'There is not any rows in Mata Pelajaran databases!'
                 messages.warning(request, message)
-            return redirect('administrator_IT:mata_pelajaran_list')
+            return redirect('administrator_IT:reset_index')
     return render(request, template_reset_index, context)
 
 
@@ -133,7 +131,7 @@ def waktu_reset(request):
             else:
                 message = 'There is not any rows in Waktu databases!'
                 messages.warning(request, message)
-            return redirect('administrator_IT:waktu_list')
+            return redirect('administrator_IT:reset_index')
     return render(request, template_reset_index, context)
 
 
@@ -153,7 +151,7 @@ def detail_mata_pelajaran_reset(request):
             else:
                 message = 'There is not any rows in Detail Mata Pelajaran databases!'
                 messages.warning(request, message)
-            return redirect('administrator_IT:detail_mata_pelajaran_list')
+            return redirect('administrator_IT:reset_index')
     return render(request, template_reset_index, context)
 
 
@@ -173,7 +171,7 @@ def detail_waktu_reset(request):
             else:
                 message = 'There is not any rows in Detail Waktu databases!'
                 messages.warning(request, message)
-            return redirect('administrator_IT:waktu_list')
+            return redirect('administrator_IT:reset_index')
     return render(request, template_reset_index, context)
 
 
@@ -192,5 +190,5 @@ def jadwal_reset(request):
             else:
                 message = 'There is not any rows in Schedule databases!'
                 messages.warning(request, message)
-            return redirect('jadwal_list')
+            return redirect('administrator_IT:reset_index')
     return render(request, template_reset_index, context)

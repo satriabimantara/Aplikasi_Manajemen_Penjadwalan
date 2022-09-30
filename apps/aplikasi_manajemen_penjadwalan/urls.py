@@ -9,6 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('jadwal/', JadwalListView.as_view(), name='jadwal_list'),
     path('administrator/', include('administrator.urls', namespace='administrator_IT')),
+    path('pimpinan/', include('pimpinan.urls', namespace='pimpinan')),
     path('tenagapengajar/', include('tenagapengajar.urls',
                                     namespace='tenagapengajar')),
     path('', IndexView.as_view(), name='index'),

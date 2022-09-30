@@ -59,10 +59,15 @@ $(document).ready(function(){
 			title : "Daftar Kelas Peserta",
 			filename : "Daftar Kelas Peserta"
 		},
+		table_waktu : {
+			id : "#tableWaktu",
+			title : "Daftar Jam Mata Pelajaran",
+			filename : "Daftar Jam Mata Pelajaran"
+		},
 		table_detail_waktu : {
 			id : "#tableDetailWaktu",
-			title : "Daftar Waktu Pelajaran",
-			filename : "Daftar Waktu Pelajaran"
+			title : "Daftar Detail Waktu Pelajaran",
+			filename : "Daftar Detail Waktu Pelajaran"
 		},
 		table_ruangan : {
 			id : "#tableRuangan",
@@ -77,6 +82,11 @@ $(document).ready(function(){
 			id : "#tableJadwal".concat(element),
 			title : "Daftar Jadwal Hari ".concat(element),
 			filename : "Daftar Jadwal Hari ".concat(element)
+		}
+		tables['table_revisi_jadwal_'.concat(element)] = {
+			id : "#tableRevisiJadwal".concat(element),
+			title : "Daftar Revisi Jadwal Hari ".concat(element),
+			filename : "Daftar Revisi Jadwal Hari ".concat(element)
 		}
 	}
 	inputDataTable(tables);

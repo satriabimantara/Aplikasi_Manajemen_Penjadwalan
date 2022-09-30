@@ -48,7 +48,7 @@ class DetailMataPelajaranIndexView(ListView):
 
 class DetailMataPelajaranCreateView(SuccessMessageMixin, CreateView):
     form_class = DetailMataPelajaranForm
-    template_name = 'administrator/create.html'
+    template_name = 'create.html'
     extra_context = {
         'title_page': 'Manage Detail Mapel | Tambah',
         'subtitle_page': "Tambah Detail Mata Pelajaran",
@@ -58,7 +58,7 @@ class DetailMataPelajaranCreateView(SuccessMessageMixin, CreateView):
         },
         'back_url': 'administrator_IT:detail_mata_pelajaran_list'
     }
-    success_url = reverse_lazy("administrator_IT:detail_mata_pelajaran_list")
+    success_url = reverse_lazy("administrator_IT:detail_mata_pelajaran_create")
     success_message = '%(mapel)s  | %(kelas_peserta)s was created successfully'
 
     def form_valid(self, form):
@@ -78,7 +78,7 @@ class DetailMataPelajaranCreateView(SuccessMessageMixin, CreateView):
 class DetailMataPelajaranUpdateView(SuccessMessageMixin, UpdateView):
     model = DetailMataPelajaran
     form_class = DetailMataPelajaranForm
-    template_name = 'administrator/create.html'
+    template_name = 'create.html'
     extra_context = {
         'title_page': 'Manage Detail Mapel | Update',
         'subtitle_page': "Update Detail Mata Pelajaran",
@@ -106,7 +106,7 @@ class DetailMataPelajaranUpdateView(SuccessMessageMixin, UpdateView):
 
 class DetailMataPelajaranDeleteView(DeleteView):
     model = DetailMataPelajaran
-    template_name = 'administrator/delete_confirmation.html'
+    template_name = 'delete_confirmation.html'
     success_url = reverse_lazy('administrator_IT:mata_pelajaran_list')
     context_object_name = 'object_deleted'
     success_message = 'Data was deleted successfully'
@@ -131,7 +131,7 @@ class DetailMataPelajaranDeleteView(DeleteView):
 
 class MataPelajaranCreateView(SuccessMessageMixin, CreateView):
     form_class = MataPelajaranForms
-    template_name = 'administrator/create.html'
+    template_name = 'create.html'
     extra_context = {
         'title_page': 'Manage Mapel | Tambah',
         'subtitle_page': "Tambah Data Mata Pelajaran",
@@ -141,7 +141,7 @@ class MataPelajaranCreateView(SuccessMessageMixin, CreateView):
         },
         'back_url': 'administrator_IT:mata_pelajaran_list'
     }
-    success_url = reverse_lazy("administrator_IT:mata_pelajaran_list")
+    success_url = reverse_lazy("administrator_IT:mata_pelajaran_create")
     success_message = '%(kode_mapel)s | %(mapel)s was created successfully'
 
     def form_valid(self, form):
@@ -161,7 +161,7 @@ class MataPelajaranCreateView(SuccessMessageMixin, CreateView):
 class MataPelajaranUpdateView(SuccessMessageMixin, UpdateView):
     model = MataPelajaran
     form_class = MataPelajaranForms
-    template_name = 'administrator/create.html'
+    template_name = 'create.html'
     extra_context = {
         'title_page': 'Manage Mapel | Update',
         'subtitle_page': "Update Data Mata Pelajaran",
@@ -189,7 +189,7 @@ class MataPelajaranUpdateView(SuccessMessageMixin, UpdateView):
 
 class MataPelajaranDeleteView(DeleteView):
     model = MataPelajaran
-    template_name = 'administrator/delete_confirmation.html'
+    template_name = 'delete_confirmation.html'
     success_url = reverse_lazy('administrator_IT:mata_pelajaran_list')
     context_object_name = 'object_deleted'
     success_message = 'Data was deleted successfully'

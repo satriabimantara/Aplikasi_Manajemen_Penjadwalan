@@ -30,7 +30,7 @@ class RuanganListView(ListView):
 
 class RuanganCreateView(SuccessMessageMixin, CreateView):
     form_class = RuanganForms
-    template_name = 'administrator/create.html'
+    template_name = 'create.html'
     extra_context = {
         'title_page': 'Manage Ruangan | Tambah',
         'subtitle_page': "Tambah Data Ruangan",
@@ -40,7 +40,7 @@ class RuanganCreateView(SuccessMessageMixin, CreateView):
         },
         'back_url': 'administrator_IT:ruangan_list'
     }
-    success_url = reverse_lazy("administrator_IT:ruangan_list")
+    success_url = reverse_lazy("administrator_IT:ruangan_create")
     success_message = '%(kode_ruangan)s | %(nama_ruangan)s was created successfully'
 
     def form_valid(self, form):
@@ -60,7 +60,7 @@ class RuanganCreateView(SuccessMessageMixin, CreateView):
 class RuanganUpdateView(SuccessMessageMixin, UpdateView):
     model = Ruangan
     form_class = RuanganForms
-    template_name = 'administrator/create.html'
+    template_name = 'create.html'
     extra_context = {
         'title_page': 'Manage Ruangan | Update',
         'subtitle_page': "Update Ruangan",
@@ -88,7 +88,7 @@ class RuanganUpdateView(SuccessMessageMixin, UpdateView):
 
 class RuanganDeleteView(DeleteView):
     model = Ruangan
-    template_name = 'administrator/delete_confirmation.html'
+    template_name = 'delete_confirmation.html'
     success_url = reverse_lazy('administrator_IT:ruangan_list')
     context_object_name = 'object_deleted'
     success_message = 'Data was deleted successfully'

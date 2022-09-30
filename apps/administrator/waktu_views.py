@@ -20,9 +20,11 @@ class WaktuIndexView(ListView):
     }
 
     def get(self, request):
+        all_waktu = Waktu.objects.all()
         all_detailwaktu = DetailWaktu.objects.all()
         self.context.update(
             {
+                'all_waktu': all_waktu,
                 'all_detailwaktu': all_detailwaktu,
             }
         )
@@ -31,7 +33,7 @@ class WaktuIndexView(ListView):
 
 class DetailWaktuCreateView(SuccessMessageMixin, CreateView):
     form_class = DetailWaktuForm
-    template_name = 'administrator/create.html'
+    template_name = 'create.html'
     extra_context = {
         'title_page': 'Manage Detail Waktu | Tambah',
         'subtitle_page': "Tambah Detail Waktu",
@@ -41,7 +43,7 @@ class DetailWaktuCreateView(SuccessMessageMixin, CreateView):
         },
         'back_url': 'administrator_IT:waktu_list'
     }
-    success_url = reverse_lazy("administrator_IT:waktu_list")
+    success_url = reverse_lazy("administrator_IT:detail_waktu_create")
     success_message = '%(hari)s  | %(waktu)s was created successfully'
 
     def form_valid(self, form):
@@ -61,7 +63,7 @@ class DetailWaktuCreateView(SuccessMessageMixin, CreateView):
 class DetailWaktuUpdateView(SuccessMessageMixin, UpdateView):
     model = DetailWaktu
     form_class = DetailWaktuForm
-    template_name = 'administrator/create.html'
+    template_name = 'create.html'
     extra_context = {
         'title_page': 'Manage Detail Waktu | Update',
         'subtitle_page': "Update Detail Waktu",
@@ -89,7 +91,7 @@ class DetailWaktuUpdateView(SuccessMessageMixin, UpdateView):
 
 class DetailWaktuDeleteView(DeleteView):
     model = DetailWaktu
-    template_name = 'administrator/delete_confirmation.html'
+    template_name = 'delete_confirmation.html'
     success_url = reverse_lazy('administrator_IT:waktu_list')
     context_object_name = 'object_deleted'
     success_message = 'Data was deleted successfully'
@@ -114,7 +116,7 @@ class DetailWaktuDeleteView(DeleteView):
 
 class WaktuCreateView(SuccessMessageMixin, CreateView):
     form_class = WaktuForm
-    template_name = 'administrator/create.html'
+    template_name = 'create.html'
     extra_context = {
         'title_page': 'Manage Waktu | Tambah',
         'subtitle_page': "Tambah Data Waktu",
@@ -124,8 +126,8 @@ class WaktuCreateView(SuccessMessageMixin, CreateView):
         },
         'back_url': 'administrator_IT:waktu_list'
     }
-    success_url = reverse_lazy("administrator_IT:waktu_list")
-    success_message = '%(kode_waktu)s | %(nama_waktu)s was created successfully'
+    success_url = reverse_lazy("administrator_IT:waktu_create")
+    success_message = '%(nama_waktu)s was created successfully'
 
     def form_valid(self, form):
         form.save()
@@ -144,7 +146,7 @@ class WaktuCreateView(SuccessMessageMixin, CreateView):
 class WaktuUpdateView(SuccessMessageMixin, UpdateView):
     model = Waktu
     form_class = WaktuForm
-    template_name = 'administrator/create.html'
+    template_name = 'create.html'
     extra_context = {
         'title_page': 'Manage Waktu | Update',
         'subtitle_page': "Update Data Waktu",
@@ -155,7 +157,7 @@ class WaktuUpdateView(SuccessMessageMixin, UpdateView):
         'back_url': 'administrator_IT:waktu_list'
     }
     success_url = reverse_lazy("administrator_IT:waktu_list")
-    success_message = '%(kode_waktu)s | %(nama_waktu)s was updated successfully'
+    success_message = '%(nama_waktu)s was updated successfully'
 
     def form_valid(self, form):
         form.save()
@@ -172,7 +174,7 @@ class WaktuUpdateView(SuccessMessageMixin, UpdateView):
 
 class WaktuDeleteView(DeleteView):
     model = Waktu
-    template_name = 'administrator/delete_confirmation.html'
+    template_name = 'delete_confirmation.html'
     success_url = reverse_lazy('administrator_IT:waktu_list')
     context_object_name = 'object_deleted'
     success_message = 'Data was deleted successfully'

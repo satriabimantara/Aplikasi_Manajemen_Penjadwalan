@@ -4,13 +4,16 @@ from aplikasi_manajemen_penjadwalan.views import JadwalListView
 from .views import (
     JadwalCreateView,
     JadwalUpdateView,
-    JadwalDeleteView
+    JadwalDeleteView,
+    RevisiJadwalListView
 )
 
 
 app_name = 'tenagapengajar'
 urlpatterns = [
     path('jadwal/tambah/', JadwalCreateView.as_view(), name='jadwal_create'),
+    path('jadwal/revisi_list/', RevisiJadwalListView.as_view(),
+         name='perbaiki_revisi_jadwal'),
     path('jadwal/update/<int:pk>/',
          JadwalUpdateView.as_view(), name='jadwal_update'),
     path('jadwal/delete/<int:pk>/',

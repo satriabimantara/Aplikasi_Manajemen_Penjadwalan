@@ -29,7 +29,7 @@ class GuruListView(ListView):
 
 class GuruCreateView(SuccessMessageMixin, CreateView):
     form_class = GuruForms
-    template_name = 'administrator/create.html'
+    template_name = 'create.html'
     extra_context = {
         'title_page': 'Manage Guru | Tambah',
         'subtitle_page': "Tambah Data Guru",
@@ -39,7 +39,7 @@ class GuruCreateView(SuccessMessageMixin, CreateView):
         },
         'back_url': 'administrator_IT:guru_list'
     }
-    success_url = reverse_lazy("administrator_IT:guru_list")
+    success_url = reverse_lazy("administrator_IT:guru_create")
     success_message = '%(nip)s | %(nama_lengkap)s was created successfully'
 
     def form_valid(self, form):
@@ -59,7 +59,7 @@ class GuruCreateView(SuccessMessageMixin, CreateView):
 class GuruUpdateView(SuccessMessageMixin, UpdateView):
     model = Guru
     form_class = GuruForms
-    template_name = 'administrator/create.html'
+    template_name = 'create.html'
     extra_context = {
         'title_page': 'Manage Guru | Update',
         'subtitle_page': "Update Guru",
@@ -87,7 +87,7 @@ class GuruUpdateView(SuccessMessageMixin, UpdateView):
 
 class GuruDeleteView(DeleteView):
     model = Guru
-    template_name = 'administrator/delete_confirmation.html'
+    template_name = 'delete_confirmation.html'
     success_url = reverse_lazy('administrator_IT:guru_list')
     context_object_name = 'object_deleted'
     success_message = 'Data was deleted successfully'
