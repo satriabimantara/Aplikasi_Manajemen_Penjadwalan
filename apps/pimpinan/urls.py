@@ -3,7 +3,7 @@ from .views import (
     RevisiJadwalListView,
     RevisiJadwalUpdateView,
     RevisiJadwalDeleteView,
-    RevisiJadwalCreateView
+    RevisiJadwalCreateView,
 )
 
 app_name = 'pimpinan'

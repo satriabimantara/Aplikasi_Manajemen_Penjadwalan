@@ -11,6 +11,7 @@ from django.views.generic import (
 from administrator.models import (
     Hari,
 )
+from tenagapengajar.forms import JadwalForm
 from tenagapengajar.models import (
     Jadwal
 )

@@ -9,6 +9,7 @@ from django.views.generic import (
 )
 from .forms import GuruForms
 from .models import Guru
+from django.http import JsonResponse
 
 
 class GuruListView(ListView):
@@ -107,3 +108,18 @@ class GuruDeleteView(DeleteView):
     def form_valid(self, form):
         messages.success(self.request, self.success_message)
         return super().form_valid(form)
+
+
+def search_guru(request):
+    keyword = request.GET.get('keyword', None)
+    # buat query untuk menjadi mata pelajaran dan kelas berdasarkan keyword
+    response_query = Guru.objects.filter(
+        nama_lengkap__icontains=keyword,
+    ).values()
+
+    # ambil hasil jquery response
+    data = {
+        'guru': list(response_query)
+    }
+
+    return JsonResponse(data)

@@ -4,7 +4,8 @@ from .guru_views import (
     GuruCreateView,
     GuruDeleteView,
     GuruUpdateView,
-    GuruListView
+    GuruListView,
+    search_guru
 )
 from .mapel_views import (
     MataPelajaranCreateView,
@@ -15,12 +16,14 @@ from .mapel_views import (
     DetailMataPelajaranCreateView,
     DetailMataPelajaranDeleteView,
     DetailMataPelajaranUpdateView,
+    search_detail_pelajaran
 )
 from .ruangan_views import (
     RuanganCreateView,
     RuanganDeleteView,
     RuanganUpdateView,
-    RuanganListView
+    RuanganListView,
+    search_ruangan
 )
 from .kelas_views import (
     DetailKelasCreateView,
@@ -36,7 +39,8 @@ from .waktu_views import (
     WaktuDeleteView,
     DetailWaktuCreateView,
     DetailWaktuUpdateView,
-    DetailWaktuDeleteView
+    DetailWaktuDeleteView,
+    search_detail_waktu
 )
 
 from .reset_views import (

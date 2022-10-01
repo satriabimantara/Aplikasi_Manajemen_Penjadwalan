@@ -39,7 +39,11 @@ from .views import (
     waktu_reset,
     detail_mata_pelajaran_reset,
     detail_waktu_reset,
-    jadwal_reset
+    jadwal_reset,
+    search_detail_pelajaran,
+    search_guru,
+    search_detail_waktu,
+    search_ruangan
 )
 
 app_name = 'administrator_IT'
@@ -115,6 +119,13 @@ urlpatterns = [
          detail_mata_pelajaran_reset, name='detail_mata_pelajaran_reset'),
     path('reset/detail_waktu',
          detail_waktu_reset, name='detail_waktu_reset'),
+
+    path('search_detail_pelajaran/', search_detail_pelajaran,
+         name='search_detail_pelajaran'),
+    path('search_guru/', search_guru, name='search_guru'),
+    path('search_detail_waktu/', search_detail_waktu, name='search_detail_waktu'),
+    path('search_ruangan/', search_ruangan, name='search_ruangan'),
+
     path('', IndexView.as_view(), name='index'),
 ]
 # add a flag for handling 404 page not found error

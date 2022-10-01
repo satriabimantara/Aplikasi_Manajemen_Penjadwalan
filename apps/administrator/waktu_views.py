@@ -9,7 +9,8 @@ from django.views.generic import (
     DeleteView
 )
 from .forms import WaktuForm, DetailWaktuForm
-from .models import Waktu, DetailWaktu, Hari
+from .models import Waktu, DetailWaktu
+from django.http import JsonResponse
 
 
 class WaktuIndexView(ListView):
@@ -195,3 +196,26 @@ class WaktuDeleteView(DeleteView):
     def form_valid(self, form):
         messages.success(self.request, self.success_message)
         return super().form_valid(form)
+
+
+def search_detail_waktu(request):
+    keyword = request.GET.get('keyword', None)
+    keyword = keyword.split(' ')
+    # contoh hasil split ['senin', '08.00']
+    if len(keyword) == 1:
+        # buat query untuk menjadi mata pelajaran dan kelas berdasarkan keyword
+        response_query = DetailWaktu.objects.filter(
+            hari__nama_hari__icontains=keyword[0],
+        ).values()
+    elif len(keyword) == 2:
+        response_query = DetailWaktu.objects.filter(
+            hari__nama_hari__icontains=keyword[0],
+            waktu__nama_waktu__icontains=keyword[1]
+        ).values()
+
+    # ambil hasil jquery response
+    data = {
+        'detail_waktu': list(response_query)
+    }
+
+    return JsonResponse(data)

@@ -20,7 +20,7 @@ from .models import (
 
 class JadwalCreateView(SuccessMessageMixin, CreateView):
     form_class = JadwalForm
-    template_name = 'create.html'
+    template_name = 'jadwal/create.html'
     extra_context = {
         'title_page': 'Manage Jadwal | Tambah',
         'subtitle_page': "Tambah Data Jadwal",

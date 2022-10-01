@@ -115,7 +115,6 @@
                         <i class="fas fa-search"></i>
                         <span>Lihat Jadwal</span></a>
                 </li>
-
                 <!-- Divider -->
                 <hr class="sidebar-divider">
 
@@ -201,6 +200,7 @@
 
         {% include 'snippets/modals_index.html' %}
         {% include 'snippets/scripts.html' %}
+        {% block javascripts_extra_code %}{% endblock javascripts_extra_code %}
     </body>
 
 </html>

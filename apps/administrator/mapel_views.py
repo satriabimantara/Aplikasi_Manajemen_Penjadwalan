@@ -1,5 +1,7 @@
 from django.urls import reverse_lazy
+from django.http import JsonResponse
 from django.contrib import messages
+from django.core.serializers import serialize
 from django.shortcuts import render
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import (
@@ -210,3 +212,26 @@ class MataPelajaranDeleteView(DeleteView):
     def form_valid(self, form):
         messages.success(self.request, self.success_message)
         return super().form_valid(form)
+
+
+# AJAX FUNCTION FOR SEARCHING KEYWORDS
+def search_detail_pelajaran(request):
+    keyword = request.GET.get('keyword', None)
+    keyword = keyword.split(' ')
+    # contoh hasil split ['matematika', 'X']
+    if len(keyword) == 1:
+        # buat query untuk menjadi mata pelajaran dan kelas berdasarkan keyword
+        response_query = DetailMataPelajaran.objects.filter(
+            mapel__mapel__icontains=keyword[0],
+        ).values()
+    elif len(keyword) == 2:
+        response_query = DetailMataPelajaran.objects.filter(
+            mapel__mapel__icontains=keyword[0],
+            kelas_peserta__kelas__nama_kelas__icontains=keyword[1]
+        ).values()
+    # ambil hasil jquery response
+    data = {
+        'detail_pelajaran': list(response_query)
+    }
+
+    return JsonResponse(data)

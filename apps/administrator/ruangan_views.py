@@ -9,6 +9,7 @@ from django.views.generic import (
 )
 from .forms import RuanganForms
 from .models import Ruangan
+from django.http import JsonResponse
 
 
 class RuanganListView(ListView):
@@ -109,3 +110,18 @@ class RuanganDeleteView(DeleteView):
     def form_valid(self, form):
         messages.success(self.request, self.success_message)
         return super().form_valid(form)
+
+
+def search_ruangan(request):
+    keyword = request.GET.get('keyword', None)
+    # buat query untuk menjadi mata pelajaran dan kelas berdasarkan keyword
+    response_query = Ruangan.objects.filter(
+        nama_ruangan__icontains=keyword,
+    ).values()
+
+    # ambil hasil jquery response
+    data = {
+        'ruangan': list(response_query)
+    }
+
+    return JsonResponse(data)
