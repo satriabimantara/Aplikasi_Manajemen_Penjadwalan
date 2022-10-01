@@ -88,6 +88,9 @@
                 success: function (data) {
                     data = data[keyword]
                     $('#id_'.concat(keyword)).val(data[0]['id'])
+                },
+                error: function (data) {
+                    alert("Something went wrong, please contact your administrator!");
                 }
             });
         });
