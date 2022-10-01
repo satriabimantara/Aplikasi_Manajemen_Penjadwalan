@@ -47,7 +47,20 @@ class JadwalForm(forms.ModelForm):
         detail_waktu = cleaned_data.get('detail_waktu')
         guru = cleaned_data.get('guru')
         ruangan = cleaned_data.get('ruangan')
-        print(detail_waktu)
+
+        """
+        CHECK CONSTRAINT JADWAL TERBENTUR
+        ================================
+        1. Check apakah data jadwal yang sama sudah ada di database?
+        2. Check apakah di jam yang sama, suatu kelas yang sama sudah ada jadwal yang diplot?
+        3. Check apakah di jam yang sama, suatu ruangan yang sama menerima jadwal pelajaran yang berbeda?
+        4. Check apakah di jam yang sama, suatu guru yang sama mengajar lebih dari satu jadwal pelajaran yang berbeda?
+        5. Check apakah suatu kelas dijadwalkan melebihi jam pelajaran yang semestinya? Misal kelas X-Umum seharusnya menerima 3 jam mata pelajaran, namun dijadwalkan untuk 4 jam mata pelajaran
+        """
+
+        # buat variable untuk menampung seluruh pesan error yang muncul
+        validation_error_messages = dict()
+
         # check apakah data jadwal persis sudah ada di database?
         existing = Jadwal.objects.filter(
             detail_pelajaran=detail_pelajaran,
@@ -56,90 +69,92 @@ class JadwalForm(forms.ModelForm):
             ruangan=ruangan,
         ).exists()
         if existing:
-            raise forms.ValidationError(
-                'Schedule is already exist!', code='schedule_exist')
+            validation_error_messages['schedule_exist'] = 'Schedule is already exist!'
+
         # check apakah untuk di Waktu ke-X, kelas Y menerima lebih dari 1 mata pelajaran?
         existing_2 = Jadwal.objects.filter(
             detail_waktu=detail_waktu,
             detail_pelajaran__kelas_peserta__id=detail_pelajaran.kelas_peserta.id
         )
         if existing_2.exists():
-            # check apakah mata pelajarannya sama? kalau sama berarti hanya update untuk field selain detail_pelajaran dan detail_waktu
-            if existing_2[0].detail_pelajaran != detail_pelajaran:
-                raise forms.ValidationError([
-                    ValidationError(
-                        'One class should only have one course in one time!', code='course_in_class_exist'),
-                    ValidationError(
-                        'Please check your input!', code='check_input')
-                ])
-            # else:
-            #     # check kalau ruangannya berbeda maka raise error karena tidak mungkin 1 siswa berada di 2 tempat yang berbeda dalam waktu yang sama
-            #     if existing_2[0].ruangan != ruangan:
-            #         raise forms.ValidationError([
-            #             ValidationError(
-            #                 'One student should only have one course in one class room in one time!', code='course_in_class_exist'),
-            #             ValidationError(
-            #                 'Please check your input!', code='check_input')
-            #         ])
+            jadwal = existing_2[0]
+            # kalau detail pelajaran dari database dengan yang diinputkan user sama, maka itu hanya update, selain itu maka munculkan error sesuai constraint
+            if jadwal.detail_pelajaran != detail_pelajaran:
+                error_messages = "{} has got a lesson schedule {} in during class hours {}".format(
+                    jadwal.detail_pelajaran.kelas_peserta,
+                    jadwal.detail_pelajaran.mapel.mapel,
+                    jadwal.detail_waktu
+                )
+                validation_error_messages['course_in_class_exist'] = error_messages
+
         # check apakah untuk di Waktu ke-X, ruangan Y menerima lebih dari 1 mata pelajaran?
         existing_3 = Jadwal.objects.filter(
             detail_waktu=detail_waktu,
             ruangan=ruangan
         )
         if existing_3.exists():
-            if existing_3[0].detail_pelajaran != detail_pelajaran:
-                raise forms.ValidationError([
-                    ValidationError(
-                        'One class room should only have one course in one time!', code='room_in_class_exist'),
-                    ValidationError(
-                        'Please check your input!', code='check_input')
-                ])
+            jadwal = existing_3[0]
+            # kalau detail pelajaran dari database dengan yang diinputkan user sama, maka itu hanya update, selain itu maka munculkan error sesuai constraint
+            if jadwal.detail_pelajaran != detail_pelajaran:
+                error_messages = "{} at time {} has been plotted for lesson schedule {}".format(
+                    jadwal.ruangan.nama_ruangan,
+                    jadwal.detail_waktu,
+                    jadwal.detail_pelajaran.mapel.mapel
+                )
+                validation_error_messages['room_has_taken_at_this_time'] = error_messages
+
         # check apakah untuk di waktu ke-X, Guru Y mengajar lebih dari 1 mata pelajaran?
         existing_4 = Jadwal.objects.filter(
             detail_waktu=detail_waktu,
             guru=guru
         )
         if existing_4.exists():
-            # check apakah mapel yang diajar Guru Y tidak berubah? kalau tidak berubah berarti hanya dilakukan update, sedangkan kalau berubah berarti munculkan error
-            if existing_4[0].detail_pelajaran != detail_pelajaran:
-                raise forms.ValidationError([
-                    ValidationError(
-                        'One teacher should only teach one course in one time!', code='teachers_in_one_time_exist'),
-                    ValidationError(
-                        'Please check your input!', code='check_input')
-                ])
-            # else:
-            #     # check kalau ruangannya berbeda maka raise error karena tidak mungkin 1 guru berada di 2 tempat yang berbeda dalam waktu yang sama
-            #     if existing_4[0].ruangan != ruangan:
-            #         raise forms.ValidationError([
-            #             ValidationError(
-            #                 'One teacher should only teach one course in one class room in one time!', code='teach_in_another_room_in_one_time_exist'),
-            #             ValidationError(
-            #                 'Please check your input!', code='check_input')
-            #         ])
+            jadwal = existing_4[0]
+            # kalau detail pelajaran dari database dengan yang diinputkan user sama, maka itu hanya update, selain itu maka munculkan error sesuai constraint
+            if jadwal.detail_pelajaran != detail_pelajaran:
+                error_messages = "Teacher {} is plotted to teach {} at time {}. So, one teacher cannot teach two subjects at the same time".format(
+                    jadwal.guru.nama_lengkap,
+                    jadwal.detail_pelajaran.mapel.mapel,
+                    jadwal.detail_waktu,
+                )
+                validation_error_messages['teachers_in_one_time_exist'] = error_messages
 
         # check apakah jam pelajaran suatu mapel sudah melebihi batas?
-        objects = Jadwal.objects.filter(
+        existing_5 = Jadwal.objects.filter(
             detail_pelajaran=detail_pelajaran
         )
-        if objects.exists():
-            total_jam = objects[0].detail_pelajaran.total_jam
+        if existing_5.exists():
+            total_jam = existing_5[0].detail_pelajaran.total_jam
             daftar_kode_waktu = list()
-            if total_jam == objects.count():
+            if total_jam == existing_5.count():
                 # masukan daftar detail_waktu unique yang diperoleh dari hasil query
-                for mapel in objects:
+                for mapel in existing_5:
                     if mapel.detail_waktu not in daftar_kode_waktu:
                         daftar_kode_waktu.append(mapel.detail_waktu)
+                print(daftar_kode_waktu)
                 # check apakah detail_waktu yang diinput user ada di daftar_kode_waktu? kalau iya maka hanya update data, selain itu munculkan warning
                 if detail_waktu not in daftar_kode_waktu:
-                    raise forms.ValidationError(
-                        [
-                            ValidationError(
-                                'Maximum time schedule has been exceed!', code='maximum_time_schedule_exceed'),
-                            ValidationError(
-                                'Please check your input!', code='check_input')
-                        ]
+                    error_messages = "Class {} should receive {} hours of {} lessons".format(
+                        jadwal.detail_pelajaran.kelas_peserta,
+                        jadwal.detail_pelajaran.total_jam,
+                        jadwal.detail_pelajaran.mapel.mapel,
                     )
+                    validation_error_messages['maximum_time_schedule_exceed'] = error_messages
+
+        # munculkan semua validation error yang ada terakhir
+        if len(validation_error_messages) > 0:
+            list_validation_error_messages = list()
+            for key_error, message in validation_error_messages.items():
+                list_validation_error_messages.append(
+                    ValidationError(
+                        message, code=key_error)
+                )
+            list_validation_error_messages.append(
+                ValidationError(
+                    'Please check your input!', code='check_input')
+            )
+            raise forms.ValidationError(list_validation_error_messages)
+
         return cleaned_data
 
     # def clean_detail_pelajaran(self):

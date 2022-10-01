@@ -205,11 +205,11 @@ class DetailWaktu(models.Model):
     )
 
     class Meta:
-        ordering = ['waktu']
+        ordering = ['hari', 'waktu']
         verbose_name_plural = "Detail Waktu"
 
     def __str__(self):
-        return "{} | {} | {}".format(self.id, self.hari.nama_hari, self.waktu.nama_waktu)
+        return "{} | {}".format(self.hari.nama_hari, self.waktu.nama_waktu)
 
 
 class DetailKelas(models.Model):
