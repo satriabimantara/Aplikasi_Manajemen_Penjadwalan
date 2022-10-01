@@ -50,7 +50,7 @@ class JadwalCreateView(SuccessMessageMixin, CreateView):
 class JadwalUpdateView(SuccessMessageMixin, UpdateView):
     model = Jadwal
     form_class = JadwalForm
-    template_name = 'create.html'
+    template_name = 'jadwal/create.html'
     extra_context = {
         'title_page': 'Manage Jadwal | Update',
         'subtitle_page': "Update Jadwal",
@@ -64,7 +64,13 @@ class JadwalUpdateView(SuccessMessageMixin, UpdateView):
     success_message = '%(detail_pelajaran)s | %(guru)s | %(detail_waktu)s was updated successfully'
 
     def form_valid(self, form):
-        form.save()
+        instance = form.save()
+        is_this_jadwal_has_revisi, revised_jadwal = form.check_if_revisi_jadwal_exist_with_this_updated_jadwal(
+            id=instance.id)
+        if is_this_jadwal_has_revisi > 0:
+            # delete revisi jadwal yang bersangkutan baru dari tabel RevisiJadwal
+            deleted_row_revisi_jadwal = revised_jadwal.delete()
+
         return super().form_valid(form)
 
     def form_invalid(self, form):

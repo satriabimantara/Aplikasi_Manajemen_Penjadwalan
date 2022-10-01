@@ -1,7 +1,7 @@
-from xml.dom import ValidationErr
 from django import forms
 from .models import Jadwal
 from django.core.exceptions import ValidationError
+from pimpinan.models import RevisiJadwal
 
 
 class JadwalForm(forms.ModelForm):
@@ -39,6 +39,16 @@ class JadwalForm(forms.ModelForm):
                 }
             ),
         }
+
+    def check_if_revisi_jadwal_exist_with_this_updated_jadwal(self, **kwargs):
+        # check apakah ada id_jadwal di tabel RevisiJadwal
+        revised_jadwal = RevisiJadwal.objects.filter(
+            jadwal__id=kwargs['id']
+        )
+        if revised_jadwal.count() > 0:
+            return revised_jadwal.count(), revised_jadwal
+        else:
+            return 0, []
 
     def clean(self, *args, **kwargs):
         # method ini akan dipanggil sebelum is_valid() form dijalankan
@@ -131,7 +141,6 @@ class JadwalForm(forms.ModelForm):
                 for mapel in existing_5:
                     if mapel.detail_waktu not in daftar_kode_waktu:
                         daftar_kode_waktu.append(mapel.detail_waktu)
-                print(daftar_kode_waktu)
                 # check apakah detail_waktu yang diinput user ada di daftar_kode_waktu? kalau iya maka hanya update data, selain itu munculkan warning
                 if detail_waktu not in daftar_kode_waktu:
                     error_messages = "Class {} should receive {} hours of {} lessons".format(

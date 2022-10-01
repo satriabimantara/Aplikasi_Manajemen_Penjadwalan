@@ -261,8 +261,7 @@ class DetailMataPelajaran(models.Model):
         verbose_name_plural = "Detail Mata Pelajaran"
 
     def __str__(self):
-        return "{}. {} | {} - {}".format(
-            self.id,
+        return "{} | {} - {}".format(
             self.mapel.mapel,
             self.kelas_peserta.kelas,
             self.kelas_peserta.jalur

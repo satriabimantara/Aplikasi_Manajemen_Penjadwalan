@@ -10,7 +10,7 @@ $(document).ready(function(){
 				{
 					extend :'pdfHtml5',
 					className : 'btn-success',
-					orientation :'landscape',
+					orientation :'portrait',
 					text: '<i class="fas fa-file-pdf" aria-hidden="true"></i> PDF',
 					title: object[keys].title,
 					extension: ".pdf",
@@ -32,7 +32,7 @@ $(document).ready(function(){
 				<'row mb-3' <'col-lg-6 d-flex justify-content-start' f> <'col-lg-6 d-flex justify-content-end' l>>+
                 <'d-flex justify-content-end' B>+
 				<'mb-3' t> +
-				<'d-flex justify-content-start mb-5 mt-3'p>
+				<'d-flex justify-content-between mb-5 mt-1'ip>
 				`
 			});
 		}
