@@ -2,9 +2,10 @@ from django.views import View
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from .forms import UserForm
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic import FormView
 from django.views.generic import (
     ListView,
 )
@@ -16,7 +17,7 @@ from administrator.models import (
 )
 
 
-class IndexView(View):
+class IndexView(LoginRequiredMixin, View):
     template_name = 'index.html'
     context = {
         'title_page': "Home",
@@ -27,7 +28,7 @@ class IndexView(View):
         return render(request, self.template_name, self.context)
 
 
-class JadwalListView(ListView):
+class JadwalListView(LoginRequiredMixin, ListView):
     model = Jadwal
     template_name = "jadwal/list.html"
     context_object_name = 'jadwal_list'
@@ -71,12 +72,17 @@ class UserLoginView(LoginView):
         return reverse_lazy('index')
 
 
-@login_required()
-def logoutView(request):
-    context = {
-        'title_page': 'Logout'
-    }
-    if request.method == "POST":
-        if request.POST['logout'] == "Submit":
-            logout(request)
-    return redirect('index')
+class RegisterView(FormView):
+    template_name = 'register.html'
+    form_class = UserCreationForm
+    redirect_authenticated_user = True
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        form.save()
+        return super(RegisterView, self).form_valid(form)
+
+    def get(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('index')
+        return super(RegisterView, self).get(*args, **kwargs)

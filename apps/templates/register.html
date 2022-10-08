@@ -12,23 +12,23 @@
         {% block app_css %}
         {% endblock app_css %}
         <title>{{title_page}}</title>
-        <title>Login</title>
+        <title>Register User</title>
     </head>
 
     <body>
         <div class="container-fluid d-flex justify-content-center mt-5">
             <div class="row">
                 <div class="col">
-                    <div class="card" style="width: 25rem;">
-                        <h5 class="card-header">Login</h5>
+                    <div class="card" style="width: 55rem;">
+                        <h5 class="card-header">Register</h5>
                         <div class="card-body">
-                            <form action='' method='POST'>
+                            <form method='POST'>
                                 {% csrf_token %}
                                 {{form.as_p}}
-                                <button type="submit" value="Login" class="btn btn-primary">Login</button>
+                                <button type="submit" value="Register" class="btn btn-primary">Register</button>
                             </form>
                             <p class="card-text mt-3">
-                                Don't have account? <a href="{% url 'register' %}">Register here!</a>
+                                Already have account? <a href="{% url 'login' %}">Login here!</a>
                             </p>
                         </div>
                     </div>

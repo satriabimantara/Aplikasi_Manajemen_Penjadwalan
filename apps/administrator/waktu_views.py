@@ -2,6 +2,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.shortcuts import render
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
     ListView,
     CreateView,
@@ -13,7 +14,7 @@ from .models import Waktu, DetailWaktu
 from django.http import JsonResponse
 
 
-class WaktuIndexView(ListView):
+class WaktuIndexView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     template_name = 'administrator/waktu/index.html'
     context = {
         'title_page': "Database | Waktu",
@@ -31,8 +32,11 @@ class WaktuIndexView(ListView):
         )
         return render(request, self.template_name, self.context)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class DetailWaktuCreateView(SuccessMessageMixin, CreateView):
+
+class DetailWaktuCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
     form_class = DetailWaktuForm
     template_name = 'create.html'
     extra_context = {
@@ -60,8 +64,11 @@ class DetailWaktuCreateView(SuccessMessageMixin, CreateView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class DetailWaktuUpdateView(SuccessMessageMixin, UpdateView):
+
+class DetailWaktuUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = DetailWaktu
     form_class = DetailWaktuForm
     template_name = 'create.html'
@@ -89,8 +96,11 @@ class DetailWaktuUpdateView(SuccessMessageMixin, UpdateView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class DetailWaktuDeleteView(DeleteView):
+
+class DetailWaktuDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = DetailWaktu
     template_name = 'delete_confirmation.html'
     success_url = reverse_lazy('administrator_IT:waktu_list')
@@ -114,8 +124,11 @@ class DetailWaktuDeleteView(DeleteView):
         messages.success(self.request, self.success_message)
         return super().form_valid(form)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class WaktuCreateView(SuccessMessageMixin, CreateView):
+
+class WaktuCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
     form_class = WaktuForm
     template_name = 'create.html'
     extra_context = {
@@ -143,8 +156,11 @@ class WaktuCreateView(SuccessMessageMixin, CreateView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class WaktuUpdateView(SuccessMessageMixin, UpdateView):
+
+class WaktuUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = Waktu
     form_class = WaktuForm
     template_name = 'create.html'
@@ -172,8 +188,11 @@ class WaktuUpdateView(SuccessMessageMixin, UpdateView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class WaktuDeleteView(DeleteView):
+
+class WaktuDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Waktu
     template_name = 'delete_confirmation.html'
     success_url = reverse_lazy('administrator_IT:waktu_list')
@@ -196,6 +215,9 @@ class WaktuDeleteView(DeleteView):
     def form_valid(self, form):
         messages.success(self.request, self.success_message)
         return super().form_valid(form)
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
 
 def search_detail_waktu(request):

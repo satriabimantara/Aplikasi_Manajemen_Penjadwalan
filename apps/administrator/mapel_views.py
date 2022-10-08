@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.core.serializers import serialize
 from django.shortcuts import render
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
     ListView,
     CreateView,
@@ -14,7 +15,7 @@ from .forms import MataPelajaranForms, DetailMataPelajaranForm
 from .models import MataPelajaran, DetailMataPelajaran
 
 
-class MataPelajaranIndexView(ListView):
+class MataPelajaranIndexView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     template_name = 'administrator/mapel/index.html'
     context = {
         'title_page': "Database | Mata Pelajaran",
@@ -30,8 +31,11 @@ class MataPelajaranIndexView(ListView):
         )
         return render(request, self.template_name, self.context)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class DetailMataPelajaranIndexView(ListView):
+
+class DetailMataPelajaranIndexView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     template_name = 'administrator/mapel/index_detail_mapel.html'
     context = {
         'title_page': "Database | Mapping Mata Pelajaran",
@@ -47,8 +51,11 @@ class DetailMataPelajaranIndexView(ListView):
         )
         return render(request, self.template_name, self.context)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class DetailMataPelajaranCreateView(SuccessMessageMixin, CreateView):
+
+class DetailMataPelajaranCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
     form_class = DetailMataPelajaranForm
     template_name = 'create.html'
     extra_context = {
@@ -76,8 +83,11 @@ class DetailMataPelajaranCreateView(SuccessMessageMixin, CreateView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class DetailMataPelajaranUpdateView(SuccessMessageMixin, UpdateView):
+
+class DetailMataPelajaranUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = DetailMataPelajaran
     form_class = DetailMataPelajaranForm
     template_name = 'create.html'
@@ -105,8 +115,11 @@ class DetailMataPelajaranUpdateView(SuccessMessageMixin, UpdateView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class DetailMataPelajaranDeleteView(DeleteView):
+
+class DetailMataPelajaranDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = DetailMataPelajaran
     template_name = 'delete_confirmation.html'
     success_url = reverse_lazy('administrator_IT:mata_pelajaran_list')
@@ -130,8 +143,11 @@ class DetailMataPelajaranDeleteView(DeleteView):
         messages.success(self.request, self.success_message)
         return super().form_valid(form)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class MataPelajaranCreateView(SuccessMessageMixin, CreateView):
+
+class MataPelajaranCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
     form_class = MataPelajaranForms
     template_name = 'create.html'
     extra_context = {
@@ -159,8 +175,11 @@ class MataPelajaranCreateView(SuccessMessageMixin, CreateView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class MataPelajaranUpdateView(SuccessMessageMixin, UpdateView):
+
+class MataPelajaranUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = MataPelajaran
     form_class = MataPelajaranForms
     template_name = 'create.html'
@@ -188,8 +207,11 @@ class MataPelajaranUpdateView(SuccessMessageMixin, UpdateView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class MataPelajaranDeleteView(DeleteView):
+
+class MataPelajaranDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = MataPelajaran
     template_name = 'delete_confirmation.html'
     success_url = reverse_lazy('administrator_IT:mata_pelajaran_list')
@@ -212,6 +234,9 @@ class MataPelajaranDeleteView(DeleteView):
     def form_valid(self, form):
         messages.success(self.request, self.success_message)
         return super().form_valid(form)
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
 
 # AJAX FUNCTION FOR SEARCHING KEYWORDS

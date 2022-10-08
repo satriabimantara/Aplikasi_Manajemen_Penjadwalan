@@ -2,6 +2,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
     ListView,
     CreateView,
@@ -16,7 +17,7 @@ from .models import (
 )
 
 
-class KelasIndexView(ListView):
+class KelasIndexView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     template_name = 'administrator/kelas/index.html'
     context = {
         'title_page': "Database | Kelas",
@@ -36,8 +37,11 @@ class KelasIndexView(ListView):
         )
         return render(request, self.template_name, self.context)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class DetailKelasCreateView(SuccessMessageMixin, CreateView):
+
+class DetailKelasCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
     form_class = DetailKelasForms
     template_name = 'create.html'
     extra_context = {
@@ -65,8 +69,11 @@ class DetailKelasCreateView(SuccessMessageMixin, CreateView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class DetailKelasUpdateView(SuccessMessageMixin, UpdateView):
+
+class DetailKelasUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = DetailKelas
     form_class = DetailKelasForms
     template_name = 'create.html'
@@ -94,8 +101,11 @@ class DetailKelasUpdateView(SuccessMessageMixin, UpdateView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class DetailKelasDeleteView(DeleteView):
+
+class DetailKelasDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = DetailKelas
     template_name = 'delete_confirmation.html'
     success_url = reverse_lazy('administrator_IT:kelas_list')
@@ -119,3 +129,6 @@ class DetailKelasDeleteView(DeleteView):
     def form_valid(self, form):
         messages.success(self.request, self.success_message)
         return super().form_valid(form)
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')

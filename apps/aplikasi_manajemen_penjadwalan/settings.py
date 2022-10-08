@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-7up1lb9#*w_m(62n6^ai!rt^p#l2#n)qtj8i=740m=2iwmm4bz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'administrator',
     'tenagapengajar',
     'pimpinan',
-    'siswa'
+    'siswa',
 ]
 
 MIDDLEWARE = [
@@ -115,7 +115,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-
+LOGIN_URL = 'login'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 

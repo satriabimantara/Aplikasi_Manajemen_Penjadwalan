@@ -5,13 +5,14 @@ from .views import (
     IndexView,
     JadwalListView,
     UserLoginView,
-    logoutView
+    RegisterView
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', UserLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
+    path('register/', RegisterView.as_view(), name='register'),
     path('jadwal/', JadwalListView.as_view(), name='jadwal_list'),
     path('administrator/', include('administrator.urls', namespace='administrator_IT')),
     path('pimpinan/', include('pimpinan.urls', namespace='pimpinan')),

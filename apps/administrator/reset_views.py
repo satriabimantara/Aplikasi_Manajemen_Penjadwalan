@@ -1,6 +1,8 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import (
     Guru,
     MataPelajaran,
@@ -12,7 +14,8 @@ from .models import (
 )
 from tenagapengajar.models import Jadwal
 
-class ResetIndexView(View):
+
+class ResetIndexView(LoginRequiredMixin, UserPassesTestMixin, View):
     template_name = 'administrator/reset.html'
     context = {
         'title_page': "Reset Data",
@@ -36,10 +39,19 @@ class ResetIndexView(View):
 
         return render(request, self.template_name, self.context)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
+
 
 template_reset_index = 'administrator/reset.html'
 
 
+def administrator_group(user):
+    return user.groups.filter(name='administrator')
+
+
+@login_required
+@user_passes_test(administrator_group)
 def guru_reset(request):
     context = {
         'title_page': 'Manage Guru | Reset',
@@ -59,6 +71,8 @@ def guru_reset(request):
     return render(request, template_reset_index, context)
 
 
+@login_required
+@user_passes_test(administrator_group)
 def kelas_peserta_reset(request):
     context = {
         'title_page': 'Manage Detail Kelas Peserta | Reset',
@@ -78,6 +92,8 @@ def kelas_peserta_reset(request):
     return render(request, template_reset_index, context)
 
 
+@login_required
+@user_passes_test(administrator_group)
 def ruangan_reset(request):
     context = {
         'title_page': 'Manage Ruangan | Reset',
@@ -97,6 +113,8 @@ def ruangan_reset(request):
     return render(request, template_reset_index, context)
 
 
+@login_required
+@user_passes_test(administrator_group)
 def mata_pelajaran_reset(request):
     context = {
         'title_page': 'Manage Mata Pelajaran | Reset',
@@ -116,6 +134,8 @@ def mata_pelajaran_reset(request):
     return render(request, template_reset_index, context)
 
 
+@login_required
+@user_passes_test(administrator_group)
 def waktu_reset(request):
     context = {
         'title_page': 'Manage Waktu | Reset',
@@ -135,6 +155,8 @@ def waktu_reset(request):
     return render(request, template_reset_index, context)
 
 
+@login_required
+@user_passes_test(administrator_group)
 def detail_mata_pelajaran_reset(request):
     context = {
         'title_page': 'Manage Detail Mata Pelajaran | Reset',
@@ -155,6 +177,8 @@ def detail_mata_pelajaran_reset(request):
     return render(request, template_reset_index, context)
 
 
+@login_required
+@user_passes_test(administrator_group)
 def detail_waktu_reset(request):
     context = {
         'title_page': 'Manage Detail Waktu | Reset',
@@ -175,6 +199,8 @@ def detail_waktu_reset(request):
     return render(request, template_reset_index, context)
 
 
+@login_required
+@user_passes_test(administrator_group)
 def jadwal_reset(request):
     context = {
         'title_page': 'Manage Jadwal | Reset',

@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 from django.views.generic import (
     CreateView,
@@ -18,7 +19,7 @@ from .models import (
 # Create your views here.
 
 
-class JadwalCreateView(SuccessMessageMixin, CreateView):
+class JadwalCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
     form_class = JadwalForm
     template_name = 'jadwal/create.html'
     extra_context = {
@@ -46,8 +47,12 @@ class JadwalCreateView(SuccessMessageMixin, CreateView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    # overide method UserPassedTestMixin hanya tenagapengajar yang bisa create jadwal
+    def test_func(self):
+        return self.request.user.groups.filter(name='tenagapengajar')
 
-class JadwalUpdateView(SuccessMessageMixin, UpdateView):
+
+class JadwalUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = Jadwal
     form_class = JadwalForm
     template_name = 'jadwal/create.html'
@@ -81,8 +86,11 @@ class JadwalUpdateView(SuccessMessageMixin, UpdateView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='tenagapengajar')
 
-class JadwalDeleteView(DeleteView):
+
+class JadwalDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Jadwal
     template_name = 'delete_confirmation.html'
     success_url = reverse_lazy('jadwal_list')
@@ -105,8 +113,11 @@ class JadwalDeleteView(DeleteView):
         messages.success(self.request, self.success_message)
         return super().form_valid(form)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='tenagapengajar')
 
-class RevisiJadwalListView(ListView):
+
+class RevisiJadwalListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = RevisiJadwal
     template_name = "tenagapengajar/revisi_jadwal_list.html"
     context_object_name = 'revisi_jadwal_list'
@@ -135,3 +146,6 @@ class RevisiJadwalListView(ListView):
         self.kwargs.update(self.extra_context)
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='tenagapengajar')

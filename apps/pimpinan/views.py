@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.generic import (
     ListView,
     CreateView,
@@ -11,7 +13,6 @@ from django.views.generic import (
 from administrator.models import (
     Hari,
 )
-from tenagapengajar.forms import JadwalForm
 from tenagapengajar.models import (
     Jadwal
 )
@@ -21,7 +22,7 @@ from .forms import (
 from .models import RevisiJadwal
 
 
-class RevisiJadwalListView(ListView):
+class RevisiJadwalListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = RevisiJadwal
     template_name = "pimpinan/revisi_jadwal_list.html"
     context_object_name = 'revisi_jadwal_list'
@@ -52,8 +53,11 @@ class RevisiJadwalListView(ListView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='pimpinan')
 
-class RevisiJadwalCreateView(SuccessMessageMixin, CreateView):
+
+class RevisiJadwalCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
     model = RevisiJadwal
     form_class = RevisiJadwalForm
     template_name = 'create.html'
@@ -99,8 +103,11 @@ class RevisiJadwalCreateView(SuccessMessageMixin, CreateView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='pimpinan')
 
-class RevisiJadwalUpdateView(SuccessMessageMixin, UpdateView):
+
+class RevisiJadwalUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = RevisiJadwal
     form_class = RevisiJadwalForm
     template_name = 'create.html'
@@ -132,8 +139,11 @@ class RevisiJadwalUpdateView(SuccessMessageMixin, UpdateView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='pimpinan')
 
-class RevisiJadwalDeleteView(DeleteView):
+
+class RevisiJadwalDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = RevisiJadwal
     template_name = 'delete_confirmation.html'
     success_url = reverse_lazy('pimpinan:revisi_jadwal_list')
@@ -166,12 +176,21 @@ class RevisiJadwalDeleteView(DeleteView):
         messages.success(self.request, self.success_message)
         return super().form_valid(form)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='pimpinan')
+
 
 def error_404_view(request, exception):
     return render(request, '404.html')
 
 
-def validasi_all_jadwal(requet, **kwargs):
+def pimpinan_group(self):
+    return self.request.user.groups.filter(name='pimpinan')
+
+
+@login_required
+@user_passes_test(pimpinan_group)
+def validasi_all_jadwal(request, **kwargs):
     template_name = 'jadwal/list.html'
     context = {
         'title_page': 'Manage Jadwal | Lock All',
@@ -183,6 +202,8 @@ def validasi_all_jadwal(requet, **kwargs):
     return redirect('jadwal_list')
 
 
+@login_required
+@user_passes_test(pimpinan_group)
 def lock_jadwal(request, **kwargs):
     template_name = 'jadwal/list.html'
     context = {
@@ -201,6 +222,8 @@ def lock_jadwal(request, **kwargs):
         return redirect('index')
 
 
+@login_required
+@user_passes_test(pimpinan_group)
 def unlock_specific_jadwal(request, **kwargs):
     template_name = 'jadwal/list.html'
     context = {

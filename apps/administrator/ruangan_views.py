@@ -1,6 +1,7 @@
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
     ListView,
     CreateView,
@@ -12,7 +13,7 @@ from .models import Ruangan
 from django.http import JsonResponse
 
 
-class RuanganListView(ListView):
+class RuanganListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Ruangan
     template_name = "administrator/ruangan/list.html"
     context_object_name = 'ruangan_list'
@@ -28,8 +29,11 @@ class RuanganListView(ListView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class RuanganCreateView(SuccessMessageMixin, CreateView):
+
+class RuanganCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
     form_class = RuanganForms
     template_name = 'create.html'
     extra_context = {
@@ -57,8 +61,11 @@ class RuanganCreateView(SuccessMessageMixin, CreateView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class RuanganUpdateView(SuccessMessageMixin, UpdateView):
+
+class RuanganUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = Ruangan
     form_class = RuanganForms
     template_name = 'create.html'
@@ -86,8 +93,11 @@ class RuanganUpdateView(SuccessMessageMixin, UpdateView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class RuanganDeleteView(DeleteView):
+
+class RuanganDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Ruangan
     template_name = 'delete_confirmation.html'
     success_url = reverse_lazy('administrator_IT:ruangan_list')
@@ -110,6 +120,9 @@ class RuanganDeleteView(DeleteView):
     def form_valid(self, form):
         messages.success(self.request, self.success_message)
         return super().form_valid(form)
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
 
 def search_ruangan(request):

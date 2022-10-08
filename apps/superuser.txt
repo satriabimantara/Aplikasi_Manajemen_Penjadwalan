@@ -3,3 +3,16 @@ Admin Login
 username = superuser
 email = superuser@gmail.com
 password = validadmin123
+
+Users
+1. username: satria
+    password: validadmin123
+
+2. username: bimantara
+    password: validadmin123
+
+3. username: administrator
+    password: validadmin123
+
+4. username: Made
+    password: validadmin123

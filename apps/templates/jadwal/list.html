@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load auth_extras %}
 
 
 {% block page_content %}
@@ -16,7 +17,10 @@
 </div>
 {% endfor %}
 {% endif %}
-<div class="d-flex justify-content-between">
+
+
+{% if request.user|has_group:'tenagapengajar' %}
+<div class="d-flex justify-content-start">
     <article>
         <a href="{% url 'tenagapengajar:jadwal_create' %}" class="btn btn-success btn-icon-split">
             <span class="icon text-white-50">
@@ -25,23 +29,34 @@
             <span class="text">Tambah Jadwal</span>
         </a>
     </article>
+</div>
+
+{% endif %}
+
+
+{% if request.user|has_group:'pimpinan' %}
+<div class="d-flex justify-content-between">
     <article>
-        <div class="btn-group" role="group" aria-label="Basic example">
-            <a href="{% url 'pimpinan:validasi_jadwal' 'Unlock' %}" class="btn btn-warning btn-icon-split">
-                <span class="icon text-white-50">
-                    <i class="fas fa-lock-open"></i>
-                </span>
-                <span class="text">Unlock Semua Jadwal</span>
-            </a>
-            <a href="{% url 'pimpinan:validasi_jadwal' 'Lock' %}" class="btn btn-danger btn-icon-split">
-                <span class="icon text-white-50">
-                    <i class="fas fa-lock"></i>
-                </span>
-                <span class="text">Lock Semua Jadwal</span>
-            </a>
-        </div>
+        <a href="{% url 'pimpinan:validasi_jadwal' 'Unlock' %}" class="btn btn-warning btn-icon-split">
+            <span class="icon text-white-50">
+                <i class="fas fa-lock-open"></i>
+            </span>
+            <span class="text">Unlock Semua Jadwal</span>
+        </a>
+    </article>
+    <article>
+        <a href="{% url 'pimpinan:validasi_jadwal' 'Lock' %}" class="btn btn-danger btn-icon-split">
+            <span class="icon text-white-50">
+                <i class="fas fa-lock"></i>
+            </span>
+            <span class="text">Lock Semua Jadwal</span>
+        </a>
     </article>
 </div>
+
+{% endif %}
+
+
 {% for hari, jadwals in jadwal_list.jadwal_list.items %}
 <div class="row mt-3">
     <div class="col">
@@ -56,7 +71,8 @@
                         <div class="col">
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table" id='tableJadwal{{hari.capitalize}}'>
+                                    <table class="table table-bordered" id='tableJadwal{{hari.capitalize}}' width="100%"
+                                        cellspacing="0">
                                         <thead>
                                             <tr>
                                                 <th scope="col">Kelas Peserta</th>
@@ -81,6 +97,8 @@
                                                     <div class="d-flex justify-content-between">
                                                         <div class="btn-group" role="group"
                                                             aria-label="Button Group Label User">
+
+                                                            {% if request.user|has_group:'tenagapengajar' %}
                                                             <a href="{% url 'tenagapengajar:jadwal_update' jadwal.id %}"
                                                                 class="btn btn-warning btn-icon-split btn-sm">
                                                                 <span class="icon text-white-50">
@@ -88,9 +106,10 @@
                                                                 </span>
                                                                 <span class="text">Edit</span>
                                                             </a>
-                                                            {% comment %} Kalau rolenya pimpinan maka munculkan button
-                                                            ini
-                                                            {% endcomment %}
+                                                            {% endif %}
+
+
+                                                            {% if request.user|has_group:'pimpinan' %}
                                                             <a href="{% url 'pimpinan:revisi_jadwal_create' jadwal.id  %}"
                                                                 class="btn btn-secondary btn-icon-split btn-sm">
                                                                 <span class="icon text-white-50">
@@ -98,8 +117,6 @@
                                                                 </span>
                                                                 <span class="text">Revisi</span>
                                                             </a>
-
-
                                                             {% if jadwal.status_validasi == "Lock" %}
                                                             <a href="{% url 'pimpinan:unlock_specific_jadwal' jadwal.id  %}"
                                                                 class="btn btn-success btn-icon-split btn-sm">
@@ -117,9 +134,10 @@
                                                                 <span class="text">Lock</span>
                                                             </a>
                                                             {% endif %}
+                                                            {% endif %}
 
 
-
+                                                            {% if request.user|has_group:'tenagapengajar' %}
                                                             <a href="{% url 'tenagapengajar:jadwal_delete' jadwal.id %}"
                                                                 class="btn btn-danger btn-icon-split btn-sm">
                                                                 <span class="icon text-white-50">
@@ -127,6 +145,8 @@
                                                                 </span>
                                                                 <span class="text">Hapus</span>
                                                             </a>
+                                                            {% endif %}
+
                                                         </div>
                                                     </div>
                                                 </td>

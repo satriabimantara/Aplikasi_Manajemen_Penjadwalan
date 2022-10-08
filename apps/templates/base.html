@@ -1,4 +1,5 @@
 {% load static %}
+{% load auth_extras %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,6 +43,8 @@
                 <!-- Divider -->
                 <hr class="sidebar-divider">
 
+
+                {% if request.user|has_group:'administrator' %}
                 <!-- Heading -->
                 <div class="sidebar-heading">
                     Administator
@@ -84,8 +87,11 @@
 
                 <!-- Divider -->
                 <hr class="sidebar-divider">
+                {% endif %}
 
                 <!-- Heading -->
+
+                {% if request.user|has_group:"pimpinan" %}
                 <div class="sidebar-heading">
                     Pimpinan
                 </div>
@@ -111,18 +117,18 @@
                         <i class="fas fa-edit"></i>
                         <span>Lihat Revisi Jadwal</span></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'jadwal_list' %}">
-                        <i class="fas fa-search"></i>
-                        <span>Lihat Jadwal</span></a>
-                </li>
                 <!-- Divider -->
                 <hr class="sidebar-divider">
+                {% endif %}
 
+
+                {% if request.user|has_group:'tenagapengajar' %}
                 <!-- Heading -->
                 <div class="sidebar-heading">
                     Tenaga Pengajar
                 </div>
+
+
 
                 <!-- Nav Item - Tenaga Pengajar -->
                 <li class="nav-item">
@@ -135,6 +141,27 @@
                         <i class="fas fa-search"></i>
                         <span>Lihat Jadwal</span></a>
                 </li>
+                <hr class="sidebar-divider">
+                {% endif %}
+
+
+                {% if request.user|has_group:'siswa' %}
+                <!-- Heading -->
+                <div class="sidebar-heading">Siswa</div>
+
+
+
+                <!-- Nav Item - Tenaga Pengajar -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'jadwal_list' %}">
+                        <i class="fas fa-search"></i>
+                        <span>Lihat Jadwal</span></a>
+                </li>
+                <hr class="sidebar-divider">
+                {% endif %}
+
+
+
 
                 <!-- Sidebar Toggler (Sidebar) -->
                 <div class="text-center d-none d-md-inline">

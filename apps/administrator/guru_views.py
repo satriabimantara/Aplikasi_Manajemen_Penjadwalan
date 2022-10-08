@@ -1,6 +1,7 @@
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
     ListView,
     CreateView,
@@ -12,7 +13,7 @@ from .models import Guru
 from django.http import JsonResponse
 
 
-class GuruListView(ListView):
+class GuruListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Guru
     template_name = "administrator/guru/list.html"
     context_object_name = 'guru_list'
@@ -27,8 +28,11 @@ class GuruListView(ListView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class GuruCreateView(SuccessMessageMixin, CreateView):
+
+class GuruCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
     form_class = GuruForms
     template_name = 'create.html'
     extra_context = {
@@ -56,8 +60,11 @@ class GuruCreateView(SuccessMessageMixin, CreateView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class GuruUpdateView(SuccessMessageMixin, UpdateView):
+
+class GuruUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = Guru
     form_class = GuruForms
     template_name = 'create.html'
@@ -85,8 +92,11 @@ class GuruUpdateView(SuccessMessageMixin, UpdateView):
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
 
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
-class GuruDeleteView(DeleteView):
+
+class GuruDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Guru
     template_name = 'delete_confirmation.html'
     success_url = reverse_lazy('administrator_IT:guru_list')
@@ -108,6 +118,9 @@ class GuruDeleteView(DeleteView):
     def form_valid(self, form):
         messages.success(self.request, self.success_message)
         return super().form_valid(form)
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='administrator')
 
 
 def search_guru(request):
