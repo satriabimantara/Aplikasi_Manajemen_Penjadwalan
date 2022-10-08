@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
@@ -169,3 +169,50 @@ class RevisiJadwalDeleteView(DeleteView):
 
 def error_404_view(request, exception):
     return render(request, '404.html')
+
+
+def validasi_all_jadwal(requet, **kwargs):
+    template_name = 'jadwal/list.html'
+    context = {
+        'title_page': 'Manage Jadwal | Lock All',
+    }
+    if kwargs['status_validasi'] == 'Lock':
+        Jadwal.objects.update(status_validasi='Lock')
+    elif kwargs['status_validasi'] == "Unlock":
+        Jadwal.objects.update(status_validasi='Unlock')
+    return redirect('jadwal_list')
+
+
+def lock_jadwal(request, **kwargs):
+    template_name = 'jadwal/list.html'
+    context = {
+        'title_page': 'Manage Jadwal | Lock',
+    }
+    print(kwargs)
+    if kwargs['pk']:
+        # ambil primary key dari jadwal yang ingin di lock
+        id_jadwal = kwargs['pk']
+
+        # update jadwal tersebut
+        Jadwal.objects.filter(pk=id_jadwal).update(status_validasi='Lock')
+
+        return redirect('jadwal_list')
+    else:
+        return redirect('index')
+
+
+def unlock_specific_jadwal(request, **kwargs):
+    template_name = 'jadwal/list.html'
+    context = {
+        'title_page': 'Manage Jadwal | Unlock',
+    }
+    if kwargs['pk']:
+        # ambil primary key dari jadwal yang ingin di lock
+        id_jadwal = kwargs['pk']
+
+        # update jadwal tersebut
+        Jadwal.objects.filter(pk=id_jadwal).update(status_validasi='Unlock')
+
+        return redirect('jadwal_list')
+    else:
+        return redirect('index')
