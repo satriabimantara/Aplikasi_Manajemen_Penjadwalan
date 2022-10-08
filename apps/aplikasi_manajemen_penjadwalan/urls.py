@@ -2,11 +2,13 @@ from django.contrib import admin
 from django.urls import path, include
 from .views import (
     IndexView,
-    JadwalListView
+    JadwalListView,
+    loginView,
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('login/', loginView, name='login'),
     path('jadwal/', JadwalListView.as_view(), name='jadwal_list'),
     path('administrator/', include('administrator.urls', namespace='administrator_IT')),
     path('pimpinan/', include('pimpinan.urls', namespace='pimpinan')),

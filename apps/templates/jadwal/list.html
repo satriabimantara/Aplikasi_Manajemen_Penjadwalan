@@ -16,19 +16,31 @@
 </div>
 {% endfor %}
 {% endif %}
-<div class="row ">
-    <div class="col">
-        {% comment %} Tambahkan role user disini siapa yang berhak menambah jadwal (Tenaga Pengajar) {% endcomment %}
-        <article>
-            <a href="{% url 'tenagapengajar:jadwal_create' %}" class="btn btn-success btn-icon-split">
+<div class="d-flex justify-content-between">
+    <article>
+        <a href="{% url 'tenagapengajar:jadwal_create' %}" class="btn btn-success btn-icon-split">
+            <span class="icon text-white-50">
+                <i class="fas fa-plus-square"></i>
+            </span>
+            <span class="text">Tambah Jadwal</span>
+        </a>
+    </article>
+    <article>
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <a href="{% url 'pimpinan:validasi_jadwal' 'Unlock' %}" class="btn btn-warning btn-icon-split">
                 <span class="icon text-white-50">
-                    <i class="fas fa-check"></i>
+                    <i class="fas fa-lock-open"></i>
                 </span>
-                <span class="text">Tambah Jadwal</span>
+                <span class="text">Unlock Semua Jadwal</span>
             </a>
-        </article>
-
-    </div>
+            <a href="{% url 'pimpinan:validasi_jadwal' 'Lock' %}" class="btn btn-danger btn-icon-split">
+                <span class="icon text-white-50">
+                    <i class="fas fa-lock"></i>
+                </span>
+                <span class="text">Lock Semua Jadwal</span>
+            </a>
+        </div>
+    </article>
 </div>
 {% for hari, jadwals in jadwal_list.jadwal_list.items %}
 <div class="row mt-3">
@@ -44,8 +56,7 @@
                         <div class="col">
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered" id='tableJadwal{{hari.capitalize}}' width="100%"
-                                        cellspacing="0">
+                                    <table class="table" id='tableJadwal{{hari.capitalize}}'>
                                         <thead>
                                             <tr>
                                                 <th scope="col">Kelas Peserta</th>
@@ -67,8 +78,9 @@
                                                 <td>{{jadwal.ruangan.nama_ruangan}}</td>
                                                 <td>{{jadwal.status_validasi}}</td>
                                                 <td>
-                                                    <div class="d-flex justify-content-end">
-                                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="btn-group" role="group"
+                                                            aria-label="Button Group Label User">
                                                             <a href="{% url 'tenagapengajar:jadwal_update' jadwal.id %}"
                                                                 class="btn btn-warning btn-icon-split btn-sm">
                                                                 <span class="icon text-white-50">
@@ -86,6 +98,28 @@
                                                                 </span>
                                                                 <span class="text">Revisi</span>
                                                             </a>
+
+
+                                                            {% if jadwal.status_validasi == "Lock" %}
+                                                            <a href="{% url 'pimpinan:unlock_specific_jadwal' jadwal.id  %}"
+                                                                class="btn btn-success btn-icon-split btn-sm">
+                                                                <span class="icon text-white-50">
+                                                                    <i class="fas fa-lock-open"></i>
+                                                                </span>
+                                                                <span class="text">Unlock</span>
+                                                            </a>
+                                                            {% else %}
+                                                            <a href="{% url 'pimpinan:lock_specific_jadwal' jadwal.id  %}"
+                                                                class="btn btn-primary btn-icon-split btn-sm">
+                                                                <span class="icon text-white-50">
+                                                                    <i class="fas fa-lock"></i>
+                                                                </span>
+                                                                <span class="text">Lock</span>
+                                                            </a>
+                                                            {% endif %}
+
+
+
                                                             <a href="{% url 'tenagapengajar:jadwal_delete' jadwal.id %}"
                                                                 class="btn btn-danger btn-icon-split btn-sm">
                                                                 <span class="icon text-white-50">

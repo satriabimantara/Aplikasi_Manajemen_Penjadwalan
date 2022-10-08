@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% include 'snippets/styles_login.html' %}
+        {% block app_css %}
+        {% endblock app_css %}
+        <title>{{title_page}}</title>
+    </head>
+
+    <body class='bg-login'>
+        <div class="container bg-card-login shadow-lg">
+            <!-- Start Row -->
+            <div class="row">
+                <!-- Start First COlumn -->
+                <div class="col-md-6 pict-card in-card">
+                    <img src="" alt="" class="img img-fluid">
+                </div>
+                <!-- End First Column -->
+                <!-- Start Second Column -->
+                <div class="col-md-6 in-card">
+                    <h1 class="display-4 login-title text-center mb-5">
+                        Login
+                    </h1>
+                    <div class="container">
+                        <form action="login.php" method="post">
+                            <div class="form-group">
+                                <label for="username_user" class="form-label">Username</label>
+                                <input type="text" class="form-control input-login" id="username_user" required="true"
+                                    name="username_user" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <label for="password_user" class="form-label">Password</label>
+                                <input type="password" class="form-control input-login" id="password_user"
+                                    required="true" name="password_user">
+                            </div>
+                            <button class="btn btn-success btn-block mt-5" name="btnLoginUser" value="" type="submit">
+                                Login
+                            </button>
+                        </form>
+                        <p class="text-center  mt-5">
+                            <a href="register.php" class="text-createaccount">
+                                Belum punya akun? Registrasi Di sini!
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                <!-- End Second Columns -->
+            </div>
+            <!-- End Row -->
+        </div>
+        {% include 'snippets/scripts.html' %}
+    </body>
+
+</html>

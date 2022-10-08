@@ -1,5 +1,7 @@
 from django.views import View
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.views.generic import (
     ListView,
 )
@@ -9,6 +11,7 @@ from tenagapengajar.models import (
 from administrator.models import (
     Hari
 )
+
 
 class IndexView(View):
     template_name = 'index.html'
@@ -50,6 +53,39 @@ class JadwalListView(ListView):
         self.kwargs.update(self.extra_context)
         kwargs = self.kwargs
         return super().get_context_data(**kwargs)
+
+
+def loginView(request):
+    context = {
+        'title_page': 'LOGIN | Aplikasi Manajemen Penjadwalan'
+    }
+
+    # permission check untuk mengecek apakah user sudah login
+    if request.method == "GET":
+        if request.user.is_authenticated:
+            # logika untuk user yang sudah login
+            return redirect('index')
+        else:
+            # redirect user ke halaman login (belum login)
+            return render(request, 'login.html', context)
+
+    if request.method == "POST":
+        # mengambil data user dari form login
+        username_input = request.POST['username']
+        password_input = request.POST['password']
+
+        # authenticate untuk memastikan apakah user ini ada di dalam db atau tidak
+        user = authenticate(
+            request,
+            username=username_input,
+            password=password_input
+        )
+        if user is not None:
+            # masukan data user ke dalam request
+            login(request, user)
+            return redirect('index')
+        else:
+            return redirect('login')
 
 
 def error_404_view(request, exception):
