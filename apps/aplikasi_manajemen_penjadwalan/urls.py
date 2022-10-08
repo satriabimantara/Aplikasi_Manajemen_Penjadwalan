@@ -1,12 +1,17 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth.views import LogoutView
 from .views import (
     IndexView,
-    JadwalListView
+    JadwalListView,
+    UserLoginView,
+    logoutView
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('login/', UserLoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     path('jadwal/', JadwalListView.as_view(), name='jadwal_list'),
     path('administrator/', include('administrator.urls', namespace='administrator_IT')),
     path('pimpinan/', include('pimpinan.urls', namespace='pimpinan')),

@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        {% include 'snippets/styles.html' %}
+        {% block app_css %}
+        {% endblock app_css %}
+        <title>{{title_page}}</title>
+        <title>Login</title>
+    </head>
+
+    <body>
+        <h1>Login</h1>
+        <form action="" method='POST'>
+            {% csrf_token %}
+            {{form.as_p}}
+            <button type="submit" value="Login" class="btn btn-primary">Login</button>
+        </form>
+        {% include 'snippets/scripts.html' %}
+    </body>
+
+</html>

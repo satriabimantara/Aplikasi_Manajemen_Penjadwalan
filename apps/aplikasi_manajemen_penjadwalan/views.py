@@ -1,5 +1,10 @@
 from django.views import View
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from .forms import UserForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.decorators import login_required
 from django.views.generic import (
     ListView,
 )
@@ -9,6 +14,7 @@ from tenagapengajar.models import (
 from administrator.models import (
     Hari
 )
+
 
 class IndexView(View):
     template_name = 'index.html'
@@ -54,3 +60,23 @@ class JadwalListView(ListView):
 
 def error_404_view(request, exception):
     return render(request, '404.html')
+
+
+class UserLoginView(LoginView):
+    template_name = 'login.html'
+    fields = "__all__"
+    redirect_authenticated_user = True
+
+    def get_success_url(self):
+        return reverse_lazy('index')
+
+
+@login_required()
+def logoutView(request):
+    context = {
+        'title_page': 'Logout'
+    }
+    if request.method == "POST":
+        if request.POST['logout'] == "Submit":
+            logout(request)
+    return redirect('index')
