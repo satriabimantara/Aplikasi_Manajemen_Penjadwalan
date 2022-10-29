@@ -1,7 +1,7 @@
 Admin Login
 
 username = superuser
-email = superuser@gmail.com
+email = satriabimantara.imd@gmail.com
 password = validadmin123
 
 Users
@@ -16,3 +16,6 @@ Users
 
 4. username: Made
     password: validadmin123
+
+5. username: siswa
+    password: akunsiswa2022

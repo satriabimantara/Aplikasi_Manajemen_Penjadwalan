@@ -98,9 +98,9 @@ class DetailMataPelajaranUpdateView(LoginRequiredMixin, UserPassesTestMixin, Suc
             'button_color': 'btn-warning',
             'button_name': 'Update'
         },
-        'back_url': 'administrator_IT:mata_pelajaran_list'
+        'back_url': 'administrator_IT:detail_mata_pelajaran_list'
     }
-    success_url = reverse_lazy("administrator_IT:mata_pelajaran_list")
+    success_url = reverse_lazy("administrator_IT:detail_mata_pelajaran_list")
     success_message = '%(kode_detailmapel)s | %(mapel)s  | %(kelas_peserta)s was updated successfully'
 
     def form_valid(self, form):
@@ -122,7 +122,7 @@ class DetailMataPelajaranUpdateView(LoginRequiredMixin, UserPassesTestMixin, Suc
 class DetailMataPelajaranDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = DetailMataPelajaran
     template_name = 'delete_confirmation.html'
-    success_url = reverse_lazy('administrator_IT:mata_pelajaran_list')
+    success_url = reverse_lazy('administrator_IT:detail_mata_pelajaran_list')
     context_object_name = 'object_deleted'
     success_message = 'Data was deleted successfully'
 
@@ -130,7 +130,7 @@ class DetailMataPelajaranDeleteView(LoginRequiredMixin, UserPassesTestMixin, Del
         'title_page': 'Manage Detail Mapel | Delete',
         'subtitle_page': "Detail Mata Pelajaran delete confirmation",
         'entity': 'Detail Mata Pelajaran',
-        'back_url': 'administrator_IT:mata_pelajaran_list'
+        'back_url': 'administrator_IT:detail_mata_pelajaran_list'
     }
 
     def get_context_data(self, **kwargs):

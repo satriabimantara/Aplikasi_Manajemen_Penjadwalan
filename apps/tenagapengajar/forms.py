@@ -134,7 +134,8 @@ class JadwalForm(forms.ModelForm):
             detail_pelajaran=detail_pelajaran
         )
         if existing_5.exists():
-            total_jam = existing_5[0].detail_pelajaran.total_jam
+            jadwal = existing_5[0]
+            total_jam = jadwal.detail_pelajaran.total_jam
             daftar_kode_waktu = list()
             if total_jam == existing_5.count():
                 # masukan daftar detail_waktu unique yang diperoleh dari hasil query

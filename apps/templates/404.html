@@ -1,9 +1,6 @@
-{% extends 'base.html' %}
-
-{% block page_content %}
-<div class="text-center">
-    <div class="error mx-auto" data-text="404">404</div>
-    <p class="lead text-gray-800 mb-5">Page Not Found</p>
-    <a href="{% url 'index' %}">&larr; Back to Dashboard</a>
+<div class="jumbotron">
+    <h1 class="display-4">404! Page Not Found</h1>
+    <p class="lead">Please enter a valid URL site!</p>
+    <hr class="my-4">
+    <a class="btn btn-primary btn-lg" href="{% url 'index' %}" role="button">Back to Dashboard</a>
 </div>
-{% endblock page_content %}

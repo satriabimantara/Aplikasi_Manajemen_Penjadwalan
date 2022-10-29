@@ -19,17 +19,22 @@
         <div class="container-fluid d-flex justify-content-center mt-5">
             <div class="row">
                 <div class="col">
-                    <div class="card" style="width: 25rem;">
+                    <div class="card" style="width: 18rem;">
                         <h5 class="card-header">Login</h5>
                         <div class="card-body">
+                            {% for message in messages %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong>Success</strong> {{message}}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% endfor %}
                             <form action='' method='POST'>
                                 {% csrf_token %}
                                 {{form.as_p}}
                                 <button type="submit" value="Login" class="btn btn-primary">Login</button>
                             </form>
-                            <p class="card-text mt-3">
-                                Don't have account? <a href="{% url 'register' %}">Register here!</a>
-                            </p>
                         </div>
                     </div>
                 </div>

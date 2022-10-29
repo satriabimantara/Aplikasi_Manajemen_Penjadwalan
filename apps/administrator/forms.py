@@ -154,15 +154,21 @@ class DetailMataPelajaranForm(forms.ModelForm):
         cleaned_data = super().clean(*args, **kwargs)
         mapel = cleaned_data.get('mapel')
         kelas_peserta = cleaned_data.get('kelas_peserta')
+        total_jam_old = cleaned_data.get('total_jam_old')
+        print(cleaned_data)
 
         # check apakah sudah ada mapel dan kelas peserta yang sama di DB
         existing_same_mapel_and_kelas_peserta = DetailMataPelajaran.objects.filter(
             mapel=mapel,
-            kelas_peserta=kelas_peserta
-        ).exists()
-        if existing_same_mapel_and_kelas_peserta:
+            kelas_peserta=kelas_peserta,
+        )
+
+        if existing_same_mapel_and_kelas_peserta.exists():
+            # if total_jam_old == existing_same_mapel_and_kelas_peserta[0].total_jam:
+
             raise forms.ValidationError(
                 'Mata Pelajaran with the same Kelas Peserta is already exist!', code='mapel_kelas_exist')
+
         return cleaned_data
 
 
