@@ -86,6 +86,21 @@
                                         </thead>
                                         <tbody>
                                             {% for jadwal in jadwals %}
+
+                                            {% if request.user|has_group:'siswa' %}
+                                            {% if jadwal.status_validasi == "Lock" %}
+                                            <tr>
+                                                <td>{{jadwal.detail_pelajaran.kelas_peserta}}</td>
+                                                <td>{{jadwal.detail_waktu.waktu.nama_waktu}}</td>
+                                                <td>{{jadwal.guru.nama_lengkap}}</td>
+                                                <td>{{jadwal.detail_pelajaran.mapel.mapel}}</td>
+                                                <td>{{jadwal.ruangan.nama_ruangan}}</td>
+                                                <td>{{jadwal.status_validasi}}</td>
+                                                <td>-</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% endif %}
+                                            {% if request.user|exclude_group:"siswa" %}
                                             <tr>
                                                 <td>{{jadwal.detail_pelajaran.kelas_peserta}}</td>
                                                 <td>{{jadwal.detail_waktu.waktu.nama_waktu}}</td>
@@ -146,11 +161,11 @@
                                                                 <span class="text">Hapus</span>
                                                             </a>
                                                             {% endif %}
-
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
+                                            {% endif %}
                                             {% endfor %}
                                         </tbody>
                                     </table>

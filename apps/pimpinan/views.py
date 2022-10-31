@@ -184,8 +184,8 @@ def error_404_view(request, exception):
     return render(request, '404.html')
 
 
-def pimpinan_group(self):
-    return self.request.user.groups.filter(name='pimpinan')
+def pimpinan_group(user):
+    return user.groups.filter(name='pimpinan')
 
 
 @login_required

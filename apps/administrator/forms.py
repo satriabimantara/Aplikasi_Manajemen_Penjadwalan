@@ -146,6 +146,7 @@ class DetailMataPelajaranForm(forms.ModelForm):
             'total_jam': forms.NumberInput(
                 attrs={
                     'class': 'form-control',
+                    'required': 'true'
                 }
             ),
         }

@@ -16,7 +16,8 @@ from .mapel_views import (
     DetailMataPelajaranCreateView,
     DetailMataPelajaranDeleteView,
     DetailMataPelajaranUpdateView,
-    search_detail_pelajaran
+    search_detail_pelajaran,
+    search_mapel
 )
 from .ruangan_views import (
     RuanganCreateView,
@@ -29,7 +30,8 @@ from .kelas_views import (
     DetailKelasCreateView,
     DetailKelasDeleteView,
     DetailKelasUpdateView,
-    KelasIndexView
+    KelasIndexView,
+    search_kelas_peserta
 )
 
 from .waktu_views import (

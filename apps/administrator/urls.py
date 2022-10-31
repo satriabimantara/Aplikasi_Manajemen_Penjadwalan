@@ -43,7 +43,9 @@ from .views import (
     search_detail_pelajaran,
     search_guru,
     search_detail_waktu,
-    search_ruangan
+    search_ruangan,
+    search_mapel,
+    search_kelas_peserta
 )
 
 app_name = 'administrator_IT'
@@ -125,6 +127,9 @@ urlpatterns = [
     path('search_guru/', search_guru, name='search_guru'),
     path('search_detail_waktu/', search_detail_waktu, name='search_detail_waktu'),
     path('search_ruangan/', search_ruangan, name='search_ruangan'),
+    path('search_mapel/', search_mapel, name='search_mapel'),
+    path('search_kelas_peserta/', search_kelas_peserta,
+         name='search_kelas_peserta'),
 
     path('', IndexView.as_view(), name='index'),
 ]

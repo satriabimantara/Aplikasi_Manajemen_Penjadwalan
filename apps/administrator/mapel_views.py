@@ -57,7 +57,7 @@ class DetailMataPelajaranIndexView(LoginRequiredMixin, UserPassesTestMixin, List
 
 class DetailMataPelajaranCreateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
     form_class = DetailMataPelajaranForm
-    template_name = 'create.html'
+    template_name = 'administrator/mapel/create_detail_mata_pelajaran.html'
     extra_context = {
         'title_page': 'Manage Detail Mapel | Tambah',
         'subtitle_page': "Tambah Detail Mata Pelajaran",
@@ -257,6 +257,21 @@ def search_detail_pelajaran(request):
     # ambil hasil jquery response
     data = {
         'detail_pelajaran': list(response_query)
+    }
+
+    return JsonResponse(data)
+
+
+def search_mapel(request):
+    keyword = request.GET.get('keyword', None)
+    # buat query untuk menjadi mata pelajaran dan kelas berdasarkan keyword
+    response_query = MataPelajaran.objects.filter(
+        mapel__icontains=keyword,
+    ).values()
+
+    # ambil hasil jquery response
+    data = {
+        'mapel': list(response_query)
     }
 
     return JsonResponse(data)

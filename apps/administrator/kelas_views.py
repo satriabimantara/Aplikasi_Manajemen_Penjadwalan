@@ -1,6 +1,7 @@
 from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.contrib import messages
+from django.http import JsonResponse
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
@@ -132,3 +133,25 @@ class DetailKelasDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView)
 
     def test_func(self):
         return self.request.user.groups.filter(name='administrator')
+
+
+def search_kelas_peserta(request):
+    keyword = request.GET.get('keyword', None)
+    keyword = keyword.split(' ')
+    # contoh hasil split ['matematika', 'X']
+    if len(keyword) == 1:
+        # buat query untuk menjadi mata pelajaran dan kelas berdasarkan keyword
+        response_query = DetailKelas.objects.filter(
+            kelas__nama_kelas__icontains=keyword[0],
+        ).values()
+    elif len(keyword) == 2:
+        response_query = DetailKelas.objects.filter(
+            kelas__nama_kelas__icontains=keyword[0],
+            jalur__nama_jalur__icontains=keyword[1],
+        ).values()
+    # ambil hasil jquery response
+    data = {
+        'kelas_peserta': list(response_query)
+    }
+
+    return JsonResponse(data)
